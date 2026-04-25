@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  AUKAN BEAUTY TEMPLATE v1.0                         ║
+     ║  Desenvolvido por AUKAN Agency · aukan.com.br       ║
+     ║  Para personalizar: edite css/config-cliente.css    ║
+     ║  e substitua as imagens em assets/img/              ║
+     ╚══════════════════════════════════════════════════════╝ -->
+
+<!-- [CLIENTE] Troque o título abaixo -->
+<title>Isabelle Moura · Hair Atelier</title>
+
+<!-- Config do cliente (paleta, fontes, variáveis) -->
+<link rel="stylesheet" href="css/config-cliente.css"/>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        serif:['Cormorant Garamond','Georgia','serif'],
+        sans:['DM Sans','system-ui','sans-serif'],
+      }
+    }
+  }
+}
+</script>
+
+<style>
+/* ── RESET ── */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  background-color: var(--cor-bg);
+  font-family: var(--font-sans);
+  color: var(--cor-texto);
+  overflow-x: hidden;
+  line-height: 1.8;
+}
+
+/* ── GRAIN TEXTURE (papel premium) ── */
+body::after {
+  content:'';
+  position:fixed; inset:0; z-index:9999; pointer-events:none;
+  opacity:0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* ── GLASS ── */
+.glass {
+  background: rgba(253,249,245,0.72);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid var(--cor-borda);
+}
+.glass-card {
+  background: rgba(253,249,245,0.58);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--cor-borda);
+}
+
+/* ── BUTTONS ── */
+.btn-cta {
+  position:relative; display:inline-flex; align-items:center; gap:.5rem;
+  background: var(--cor-primaria); color:#fdf9f5;
+  font-family: var(--font-sans); font-weight:500;
+  letter-spacing:.08em; text-transform:uppercase; font-size:.76rem;
+  padding:.9rem 2.4rem; border-radius:2px;
+  transition: background .4s var(--ease), box-shadow .4s var(--ease), transform .4s var(--ease);
+  overflow:hidden; z-index:0;
+}
+.btn-cta::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(circle at center, var(--glow) 0%, transparent 68%);
+  opacity:0; transition:opacity .4s var(--ease); z-index:-1;
+}
+.btn-cta:hover { background:#7e5a40; box-shadow:0 0 32px var(--glow),0 6px 24px rgba(107,76,52,.28); transform:translateY(-2px); }
+.btn-cta:hover::before { opacity:1; }
+
+.btn-outline {
+  display:inline-flex; align-items:center; gap:.5rem;
+  border:1px solid var(--cor-primaria); color:var(--cor-primaria);
+  font-family:var(--font-sans); font-weight:500;
+  letter-spacing:.08em; text-transform:uppercase; font-size:.76rem;
+  padding:.9rem 2.4rem; border-radius:2px;
+  transition: all .4s var(--ease);
+}
+.btn-outline:hover { background:var(--cor-primaria); color:#fdf9f5; box-shadow:0 0 26px var(--glow); transform:translateY(-2px); }
+
+/* ── TIPOGRAFIA ── */
+h1, h2 { letter-spacing: -0.03em; }
+
+.line-mask { overflow:hidden; display:block; }
+.line-mask span { display:block; will-change:transform; }
+
+/* ── HERO BG — usa assets/img/hero/hero-bg.jpg ── */
+.hero-bg {
+  background-image:
+    linear-gradient(165deg, rgba(253,249,245,.94) 0%, rgba(240,230,211,.78) 48%, rgba(253,249,245,.90) 100%),
+    /* [CLIENTE] Troque a imagem abaixo */
+    url('assets/img/hero/hero-bg.jpg');
+  background-size:cover;
+  background-position:center 30%;
+}
+
+/* ── NAV ── */
+.nav-link {
+  font-family:var(--font-sans); font-size:.76rem;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:var(--cor-primaria); opacity:.7; position:relative;
+  transition: opacity .3s var(--ease);
+}
+.nav-link::after {
+  content:''; position:absolute; left:0; bottom:-3px;
+  width:0; height:1px; background:var(--cor-primaria);
+  transition: width .35s var(--ease);
+}
+.nav-link:hover { opacity:1; }
+.nav-link:hover::after { width:100%; }
+
+/* ── SCROLL LINE ── */
+.scroll-line {
+  width:1px; height:64px;
+  background: linear-gradient(to bottom, var(--cor-primaria), transparent);
+  margin:0 auto;
+  animation: scrollPulse 2.8s var(--ease) infinite;
+}
+@keyframes scrollPulse {
+  0%,100%{opacity:.25;transform:scaleY(.75) translateY(0);}
+  50%{opacity:1;transform:scaleY(1) translateY(4px);}
+}
+
+/* ── BENTO GRID ── */
+.bento-grid { display:grid; grid-template-columns:repeat(12,1fr); gap:1rem; }
+.bento-1 { grid-column:span 12; }
+.bento-2, .bento-3 { grid-column:span 12; }
+@media (min-width:768px) {
+  .bento-1 { grid-column:span 7; grid-row:span 2; }
+  .bento-2, .bento-3, .bento-4, .bento-5, .bento-6 { grid-column:span 5; }
+}
+@media (min-width:1024px) {
+  .bento-1 { grid-column:span 7; }
+  .bento-2, .bento-3 { grid-column:span 5; }
+  .bento-4 { grid-column:span 5; grid-row:span 2; }
+  .bento-5, .bento-6 { grid-column:span 4; }
+}
+
+/* ── BENTO CARD SHAPES ── */
+.bento-card { overflow:hidden; position:relative; transition:transform .5s var(--ease), box-shadow .5s var(--ease); }
+.bento-card:hover { transform:translateY(-5px); box-shadow:0 28px 60px rgba(107,76,52,.14); }
+
+.bento-card.rect { border-radius:6px; }
+.bento-card.arc-top {
+  border-top-left-radius:55% 28%; border-top-right-radius:55% 28%;
+  border-bottom-left-radius:4px; border-bottom-right-radius:4px;
+}
+.bento-card.arc-top-right {
+  border-top-left-radius:4px; border-top-right-radius:58% 32%;
+  border-bottom-left-radius:4px; border-bottom-right-radius:4px;
+}
+
+.parallax-wrap { width:100%; height:100%; overflow:hidden; position:absolute; inset:0; }
+.parallax-img  { width:100%; height:120%; object-fit:cover; object-position:center 30%; will-change:transform; filter:saturate(.92); transition:filter .5s var(--ease); }
+.bento-card:hover .parallax-img { filter:saturate(1.06); }
+
+.label-overlay {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:2rem 1.4rem 1.4rem;
+  background:linear-gradient(to top, rgba(40,25,15,.72) 0%, transparent 100%);
+  color:#fdf9f5; z-index:2;
+}
+.label-overlay h3 { font-family:var(--font-serif); font-size:1.3rem; font-weight:400; letter-spacing:-.01em; }
+.label-overlay p  { font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; opacity:.75; margin-top:.3rem; }
+
+/* ── ORNAMENT ── */
+.ornament { display:flex; align-items:center; gap:1rem; justify-content:center; }
+.ornament::before, .ornament::after {
+  content:''; flex:1; height:1px;
+  background:linear-gradient(90deg, transparent, var(--cor-areia));
+  max-width:80px;
+}
+.ornament::after { background:linear-gradient(90deg, var(--cor-areia), transparent); }
+
+/* ── SECTION LABEL ── */
+.section-label {
+  font-family:var(--font-sans); font-size:.7rem;
+  letter-spacing:.22em; text-transform:uppercase;
+  color:var(--cor-areia); display:block; margin-bottom:.85rem;
+}
+
+/* ── DIFF CARD ── */
+.diff-card {
+  background:white; border:1px solid var(--cor-borda);
+  border-radius:6px; padding:2.2rem 1.75rem;
+  transition: box-shadow .4s var(--ease), transform .4s var(--ease);
+}
+.diff-card:hover { transform:translateY(-4px); box-shadow:0 20px 48px rgba(107,76,52,.1); }
+
+/* ── STARS ── */
+.stars { color:var(--cor-areia); letter-spacing:2px; }
+
+/* ── FORM ── */
+.field {
+  width:100%; background:transparent; border:none;
+  border-bottom:1px solid rgba(107,76,52,.28);
+  padding:.75rem 0; font-family:var(--font-sans);
+  font-size:.9rem; color:var(--cor-texto); outline:none;
+  transition:border-color .3s var(--ease);
+}
+.field::placeholder { color:rgba(107,76,52,.4); }
+.field:focus { border-bottom-color:var(--cor-primaria); }
+
+/* ── TESTI CARD ── */
+.testi-card { transition:transform .5s var(--ease), box-shadow .5s var(--ease); }
+.testi-card:hover { transform:translateY(-5px); box-shadow:0 24px 52px rgba(107,76,52,.1); }
+
+/* ── GSAP INIT ── */
+.gsap-hidden { opacity:0; }
+
+/* ── FOOTER ICON ── */
+.footer-icon { color:rgba(212,184,150,.4); transition:color .3s var(--ease), transform .3s var(--ease); display:inline-block; }
+.footer-icon:hover { color:#d4b896; transform:translateY(-2px); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<header id="header" class="fixed top-0 left-0 right-0 z-50 glass transition-all duration-500">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <!-- [CLIENTE] Nome e sub-título -->
+    <a href="#" class="flex flex-col leading-none gsap-hidden" id="logo">
+      <span style="font-family:var(--font-serif);font-size:1.5rem;font-weight:300;color:var(--cor-primaria);letter-spacing:.04em;">
+        Isabelle Moura <!-- [CLIENTE] -->
+      </span>
+      <span style="font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--cor-areia);margin-top:1px;">
+        Hair Atelier <!-- [CLIENTE] -->
+      </span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-8 gsap-hidden" id="nav-links">
+      <!-- [CLIENTE] Ajuste os labels de navegação se necessário -->
+      <a href="#diferenciais" class="nav-link">Diferenciais</a>
+      <a href="#servicos"     class="nav-link">Serviços</a>
+      <a href="#depoimentos"  class="nav-link">Clientes</a>
+      <a href="#contato"      class="nav-link">Contato</a>
+    </nav>
+
+    <!-- [CLIENTE] Troque o número do WhatsApp -->
+    <a href="https://wa.me/5512999999999" class="btn-cta hidden md:inline-flex gsap-hidden" id="header-cta" target="_blank">
+      Agendar Consulta
+    </a>
+    <button id="menuBtn" class="md:hidden p-1" style="color:var(--cor-primaria);">
+      <i data-lucide="menu" class="w-5 h-5"></i>
+    </button>
+  </div>
+  <div id="mobileMenu" class="hidden md:hidden px-6 pb-5 flex flex-col gap-4">
+    <a href="#diferenciais" class="nav-link">Diferenciais</a>
+    <a href="#servicos"     class="nav-link">Serviços</a>
+    <a href="#depoimentos"  class="nav-link">Clientes</a>
+    <a href="#contato"      class="nav-link">Contato</a>
+    <a href="https://wa.me/5512999999999" class="btn-cta self-start mt-2" target="_blank">Agendar Consulta</a>
+  </div>
+</header>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<!-- Imagem de fundo: assets/img/hero/hero-bg.jpg -->
+<section class="hero-bg min-h-screen flex flex-col justify-center pt-28 pb-16">
+  <div class="max-w-6xl mx-auto px-6 w-full">
+    <div class="max-w-2xl">
+
+      <!-- [CLIENTE] Localização / tag -->
+      <span class="section-label gsap-hidden" id="hero-label">Salão · São Paulo</span>
+
+      <!-- [CLIENTE] Título principal — máx 3 linhas curtas -->
+      <h1 id="hero-title" style="font-family:var(--font-serif);font-size:clamp(3.2rem,7.5vw,6rem);font-weight:300;line-height:1.06;color:var(--cor-texto);">
+        <span class="line-mask"><span>Beleza que</span></span>
+        <span class="line-mask"><span><em style="font-style:italic;font-weight:300;">revela</em> quem</span></span>
+        <span class="line-mask"><span>você é.</span></span>
+      </h1>
+
+      <!-- [CLIENTE] Subtítulo -->
+      <p id="hero-sub" class="gsap-hidden mt-6" style="font-size:1.05rem;max-width:440px;font-weight:300;line-height:1.8;color:var(--cor-texto-suave);">
+        Tratamentos exclusivos, mechas personalizadas e visagismo para mulheres que valorizam autenticidade e refinamento.
+      </p>
+
+      <div id="hero-btns" class="gsap-hidden mt-10 flex flex-wrap gap-4">
+        <a href="https://wa.me/5512999999999" class="btn-cta" target="_blank">
+          <i data-lucide="calendar" class="w-4 h-4"></i>
+          Agendar Agora <!-- [CLIENTE] -->
+        </a>
+        <a href="#servicos" class="btn-outline">Ver Serviços</a>
+      </div>
+
+      <!-- [CLIENTE] Troque as 3 fotos de clientes em assets/img/depoimentos/ -->
+      <div id="hero-pill" class="gsap-hidden mt-12 inline-flex items-center gap-3 bg-white/60 backdrop-blur border rounded-full px-5 py-3" style="border-color:var(--cor-borda);">
+        <div class="flex -space-x-2">
+          <img src="assets/img/depoimentos/cliente-01.jpg" onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop&crop=face'" class="w-8 h-8 rounded-full border-2 border-white object-cover" alt=""/>
+          <img src="assets/img/depoimentos/cliente-02.jpg" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=40&h=40&fit=crop&crop=face'" class="w-8 h-8 rounded-full border-2 border-white object-cover" alt=""/>
+          <img src="assets/img/depoimentos/cliente-03.jpg" onerror="this.src='https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=40&h=40&fit=crop&crop=face'" class="w-8 h-8 rounded-full border-2 border-white object-cover" alt=""/>
+        </div>
+        <!-- [CLIENTE] Ajuste o número -->
+        <p style="font-size:.78rem;color:var(--cor-primaria);"><strong>+320 clientes</strong> transformadas este ano</p>
+      </div>
+    </div>
+
+    <div class="mt-20 flex flex-col items-center gap-2 opacity-50">
+      <span style="font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--cor-primaria);">Role</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ DIFERENCIAIS ══════════════════ -->
+<section id="diferenciais" class="py-32" style="background:var(--cor-bg);">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="text-center mb-20 gsap-reveal">
+      <span class="section-label">Por que escolher</span>
+      <!-- [CLIENTE] Título da seção -->
+      <h2 style="font-family:var(--font-serif);font-size:clamp(2.2rem,4vw,3.2rem);font-weight:400;color:var(--cor-texto);">
+        Uma experiência além do salão
+      </h2>
+      <div class="ornament mt-5">
+        <!-- [CLIENTE] Tagline de 3 palavras -->
+        <span style="font-family:var(--font-serif);font-style:italic;color:var(--cor-areia);font-size:.9rem;">expertise · cuidado · resultado</span>
+      </div>
+    </div>
+
+    <!-- [CLIENTE] 3 diferenciais — troque ícone Lucide, título e texto -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+      <div class="diff-card gsap-reveal text-center">
+        <div class="w-12 h-12 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:rgba(212,184,150,.18);">
+          <i data-lucide="sparkles" class="w-5 h-5" style="color:var(--cor-primaria);"></i>
+        </div>
+        <h3 style="font-family:var(--font-serif);font-size:1.35rem;font-weight:500;color:var(--cor-texto);margin-bottom:.7rem;">Visagismo Personalizado</h3>
+        <p style="font-size:.88rem;color:var(--cor-texto-suave);line-height:1.8;">Análise do rosto e personalidade para criar um visual único que amplifique sua essência.</p>
+      </div>
+      <div class="diff-card gsap-reveal text-center">
+        <div class="w-12 h-12 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:rgba(212,184,150,.18);">
+          <i data-lucide="award" class="w-5 h-5" style="color:var(--cor-primaria);"></i>
+        </div>
+        <h3 style="font-family:var(--font-serif);font-size:1.35rem;font-weight:500;color:var(--cor-texto);margin-bottom:.7rem;">Produtos Premium</h3>
+        <p style="font-size:.88rem;color:var(--cor-texto-suave);line-height:1.8;">Uso exclusivo de linhas profissionais Wella, Redken e L'Oréal Professionnel para resultados duradouros.</p>
+      </div>
+      <div class="diff-card gsap-reveal text-center">
+        <div class="w-12 h-12 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:rgba(212,184,150,.18);">
+          <i data-lucide="clock" class="w-5 h-5" style="color:var(--cor-primaria);"></i>
+        </div>
+        <h3 style="font-family:var(--font-serif);font-size:1.35rem;font-weight:500;color:var(--cor-texto);margin-bottom:.7rem;">Atendimento Exclusivo</h3>
+        <p style="font-size:.88rem;color:var(--cor-texto-suave);line-height:1.8;">Agenda individual sem sobreposição de horários. Seu tempo e conforto são absoluta prioridade.</p>
+      </div>
+    </div>
+
+    <!-- [CLIENTE] 4 números de credibilidade -->
+    <div class="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 text-center border-t pt-16" style="border-color:var(--cor-borda);">
+      <div class="gsap-reveal">
+        <p style="font-family:var(--font-serif);font-size:3rem;font-weight:300;color:var(--cor-primaria);line-height:1;letter-spacing:-.03em;">12+</p>
+        <p style="font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cor-texto-suave);margin-top:.5rem;">Anos de experiência</p>
+      </div>
+      <div class="gsap-reveal">
+        <p style="font-family:var(--font-serif);font-size:3rem;font-weight:300;color:var(--cor-primaria);line-height:1;letter-spacing:-.03em;">98%</p>
+        <p style="font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cor-texto-suave);margin-top:.5rem;">Taxa de retorno</p>
+      </div>
+      <div class="gsap-reveal">
+        <p style="font-family:var(--font-serif);font-size:3rem;font-weight:300;color:var(--cor-primaria);line-height:1;letter-spacing:-.03em;">320+</p>
+        <p style="font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cor-texto-suave);margin-top:.5rem;">Clientes ativas</p>
+      </div>
+      <div class="gsap-reveal">
+        <p style="font-family:var(--font-serif);font-size:3rem;font-weight:300;color:var(--cor-primaria);line-height:1;letter-spacing:-.03em;">5★</p>
+        <p style="font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cor-texto-suave);margin-top:.5rem;">Google Avaliações</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ SERVIÇOS — BENTO GRID ══════════════════ -->
+<!-- Imagens: assets/img/servicos/servico-01.jpg até servico-06.jpg -->
+<section id="servicos" class="py-32" style="background:var(--cor-bg-alt);">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 gsap-reveal">
+      <div>
+        <span class="section-label">Especialidades</span>
+        <!-- [CLIENTE] -->
+        <h2 style="font-family:var(--font-serif);font-size:clamp(2.2rem,4vw,3.2rem);font-weight:400;color:var(--cor-texto);">Arte em cada fio</h2>
+      </div>
+      <p style="font-size:.88rem;color:var(--cor-texto-suave);max-width:300px;line-height:1.8;">Técnicas desenvolvidas ao longo de uma década, refinadas para o resultado perfeito que você merece.</p>
+    </div>
+
+    <div class="bento-grid gsap-reveal">
+
+      <!-- Card 1 — Grande RECT
+           [CLIENTE] assets/img/servicos/servico-01.jpg -->
+      <div class="bento-card rect bento-1" style="height:480px;" data-parallax>
+        <div class="parallax-wrap">
+          <img src="assets/img/servicos/servico-01.jpg"
+               onerror="this.src='https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1000&q=80&auto=format'"
+               class="parallax-img" alt="Serviço 1"/>
+        </div>
+        <div class="label-overlay">
+          <h3>Mechas & Coloração</h3> <!-- [CLIENTE] -->
+          <p>Balayage · Babylights · Airtouch</p>
+        </div>
+      </div>
+
+      <!-- Card 2 — ARC TOP (espelho oval de salão)
+           [CLIENTE] assets/img/servicos/servico-02.jpg -->
+      <div class="bento-card arc-top bento-2" style="height:232px;" data-parallax>
+        <div class="parallax-wrap">
+          <img src="assets/img/servicos/servico-02.jpg"
+               onerror="this.src='https://images.unsplash.com/photo-1560869713-7d0a29430803?w=800&q=80&auto=format'"
+               class="parallax-img" alt="Serviço 2"/>
+        </div>
+        <div class="label-overlay">
+          <h3>Tratamentos Capilares</h3>
+          <p>Reconstrução · Hidratação · Cronograma</p>
+        </div>
+      </div>
+
+      <!-- Card 3 — RECT
+           [CLIENTE] assets/img/servicos/servico-03.jpg -->
+      <div class="bento-card rect bento-3" style="height:232px;" data-parallax>
+        <div class="parallax-wrap">
+          <img src="assets/img/servicos/servico-03.jpg"
+               onerror="this.src='https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=800&q=80&auto=format'"
+               class="parallax-img" alt="Serviço 3"/>
+        </div>
+        <div class="label-overlay">
+          <h3>Corte & Visagismo</h3>
+          <p>Análise facial · Corte preciso</p>
+        </div>
+      </div>
+
+      <!-- Card 4 — RECT
+           [CLIENTE] assets/img/servicos/servico-04.jpg -->
+      <div class="bento-card rect bento-4" style="height:320px;" data-parallax>
+        <div class="parallax-wrap">
+          <img src="assets/img/servicos/servico-04.jpg"
+               onerror="this.src='https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=800&q=80&auto=format'"
+               class="parallax-img" alt="Serviço 4"/>
+        </div>
+        <div class="label-overlay">
+          <h3>Penteados & Noivas</h3>
+          <p>Casamentos · Eventos · Formaturas</p>
+        </div>
+      </div>
+
+      <!-- Card 5 — ARC TOP RIGHT (segundo arco alternado)
+           [CLIENTE] assets/img/servicos/servico-05.jpg -->
+      <div class="bento-card arc-top-right bento-5" style="height:320px;" data-parallax>
+        <div class="parallax-wrap">
+          <img src="assets/img/servicos/servico-05.jpg"
+               onerror="this.src='https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80&auto=format'"
+               class="parallax-img" alt="Serviço 5"/>
+        </div>
+        <div class="label-overlay">
+          <h3>Alisamentos</h3>
+          <p>Progressiva · Botox Capilar</p>
+        </div>
+      </div>
+
+      <!-- Card 6 — RECT
+           [CLIENTE] assets/img/servicos/servico-06.jpg -->
+      <div class="bento-card rect bento-6" style="height:320px;" data-parallax>
+        <div class="parallax-wrap">
+          <img src="assets/img/servicos/servico-06.jpg"
+               onerror="this.src='https://images.unsplash.com/photo-1541753866388-0b3c701627d3?w=800&q=80&auto=format'"
+               class="parallax-img" alt="Serviço 6"/>
+        </div>
+        <div class="label-overlay">
+          <h3>Finalização & Escova</h3>
+          <p>Modelação · Babyliss · Ondas</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-14 gsap-reveal">
+      <a href="https://wa.me/5512999999999" class="btn-cta" target="_blank">
+        <i data-lucide="message-circle" class="w-4 h-4"></i>
+        Consultar valores no WhatsApp <!-- [CLIENTE] -->
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ DEPOIMENTOS ══════════════════ -->
+<!-- [CLIENTE] Fotos: assets/img/depoimentos/cliente-01/02/03.jpg -->
+<section id="depoimentos" class="py-32" style="background:var(--cor-bg);">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <div class="text-center mb-20 gsap-reveal">
+      <span class="section-label">Depoimentos</span>
+      <h2 style="font-family:var(--font-serif);font-size:clamp(2.2rem,4vw,3.2rem);font-weight:400;color:var(--cor-texto);">
+        O que dizem minhas clientes <!-- [CLIENTE] -->
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- [CLIENTE] 3 depoimentos reais -->
+      <div class="glass-card testi-card rounded p-8 gsap-reveal flex flex-col gap-5">
+        <p class="stars text-sm">★★★★★</p>
+        <p style="font-family:var(--font-serif);font-size:1.1rem;font-style:italic;color:#4a3426;line-height:1.8;">
+          "Encontrei na Isabelle o equilíbrio perfeito entre técnica e sensibilidade. Meu cabelo nunca esteve tão saudável."
+        </p>
+        <div class="flex items-center gap-3 mt-auto pt-4 border-t" style="border-color:var(--cor-borda);">
+          <img src="assets/img/depoimentos/cliente-01.jpg"
+               onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face'"
+               class="w-10 h-10 rounded-full object-cover" alt=""/>
+          <div>
+            <p style="font-size:.88rem;font-weight:500;color:var(--cor-texto);">Camila Ferreira</p>
+            <p style="font-size:.74rem;color:var(--cor-texto-suave);">Empresária</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card testi-card rounded p-8 gsap-reveal flex flex-col gap-5" style="background:rgba(107,76,52,.05);">
+        <p class="stars text-sm">★★★★★</p>
+        <p style="font-family:var(--font-serif);font-size:1.1rem;font-style:italic;color:#4a3426;line-height:1.8;">
+          "O visagismo mudou completamente a minha relação com o espelho. Ela entende a alma antes de tocar no cabelo."
+        </p>
+        <div class="flex items-center gap-3 mt-auto pt-4 border-t" style="border-color:var(--cor-borda);">
+          <img src="assets/img/depoimentos/cliente-02.jpg"
+               onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=face'"
+               class="w-10 h-10 rounded-full object-cover" alt=""/>
+          <div>
+            <p style="font-size:.88rem;font-weight:500;color:var(--cor-texto);">Rafaela Andrade</p>
+            <p style="font-size:.74rem;color:var(--cor-texto-suave);">Advogada</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card testi-card rounded p-8 gsap-reveal flex flex-col gap-5">
+        <p class="stars text-sm">★★★★★</p>
+        <p style="font-family:var(--font-serif);font-size:1.1rem;font-style:italic;color:#4a3426;line-height:1.8;">
+          "Fiz meu penteado de casamento com ela. Chorei de alegria ao ver o resultado. Profissional de outro nível."
+        </p>
+        <div class="flex items-center gap-3 mt-auto pt-4 border-t" style="border-color:var(--cor-borda);">
+          <img src="assets/img/depoimentos/cliente-03.jpg"
+               onerror="this.src='https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&h=80&fit=crop&crop=face'"
+               class="w-10 h-10 rounded-full object-cover" alt=""/>
+          <div>
+            <p style="font-size:.88rem;font-weight:500;color:var(--cor-texto);">Larissa Matos</p>
+            <p style="font-size:.74rem;color:var(--cor-texto-suave);">Noiva — 2024</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mt-16 flex justify-center gsap-reveal">
+      <div class="inline-flex items-center gap-5 bg-white border rounded px-9 py-6 shadow-sm" style="border-color:var(--cor-borda);">
+        <div class="text-center">
+          <p style="font-family:var(--font-serif);font-size:2.6rem;font-weight:300;color:var(--cor-primaria);line-height:1;letter-spacing:-.03em;">5.0</p>
+          <p class="stars text-xs mt-1">★★★★★</p>
+        </div>
+        <div class="w-px h-12" style="background:var(--cor-borda);"></div>
+        <div>
+          <p style="font-size:.84rem;font-weight:500;color:var(--cor-texto);">Google Avaliações</p>
+          <!-- [CLIENTE] Número de avaliações -->
+          <p style="font-size:.78rem;color:var(--cor-texto-suave);">Baseado em 148 avaliações</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ CONTATO ══════════════════ -->
+<section id="contato" style="background:linear-gradient(135deg,var(--cor-primaria) 0%,#3d2e22 100%);" class="py-32">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+
+      <div class="gsap-reveal">
+        <span class="section-label" style="color:rgba(212,184,150,.55);">Agende sua visita</span>
+        <h2 style="font-family:var(--font-serif);font-size:clamp(2.2rem,4vw,3.2rem);font-weight:300;color:#fdf9f5;line-height:1.12;">
+          Pronta para a sua<br/><em style="font-style:italic;">transformação?</em> <!-- [CLIENTE] -->
+        </h2>
+        <p style="font-size:.9rem;color:rgba(253,249,245,.55);margin-top:1.3rem;line-height:1.8;max-width:380px;">
+          Entre em contato pelo WhatsApp ou preencha o formulário. Retorno em até 2 horas em dias úteis.
+        </p>
+        <div class="mt-8 flex flex-col gap-4">
+          <!-- [CLIENTE] Dados de contato -->
+          <div class="flex items-center gap-3">
+            <i data-lucide="map-pin" class="w-4 h-4 flex-shrink-0" style="color:var(--cor-areia);"></i>
+            <span style="font-size:.88rem;color:rgba(253,249,245,.68);">Rua das Magnólias, 412 — Jardim Europa, SP</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i data-lucide="phone" class="w-4 h-4 flex-shrink-0" style="color:var(--cor-areia);"></i>
+            <span style="font-size:.88rem;color:rgba(253,249,245,.68);">(12) 99999-9999</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i data-lucide="instagram" class="w-4 h-4 flex-shrink-0" style="color:var(--cor-areia);"></i>
+            <span style="font-size:.88rem;color:rgba(253,249,245,.68);">@isabellemourahair</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i data-lucide="clock-3" class="w-4 h-4 flex-shrink-0" style="color:var(--cor-areia);"></i>
+            <span style="font-size:.88rem;color:rgba(253,249,245,.68);">Seg–Sáb · 9h às 19h</span>
+          </div>
+        </div>
+        <a href="https://wa.me/5512999999999" class="btn-cta mt-10 inline-flex" style="background:var(--cor-areia);color:#3d2e22;" target="_blank">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          Chamar no WhatsApp
+        </a>
+      </div>
+
+      <div class="glass-card rounded p-9 gsap-reveal" style="border-color:rgba(212,184,150,.18);">
+        <h3 style="font-family:var(--font-serif);font-size:1.55rem;font-weight:400;color:var(--cor-texto);margin-bottom:2rem;">Solicitar Agendamento</h3>
+        <div class="flex flex-col gap-7">
+          <div>
+            <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cor-texto-suave);">Nome completo</label>
+            <input class="field" type="text" placeholder="Seu nome"/>
+          </div>
+          <div>
+            <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cor-texto-suave);">WhatsApp</label>
+            <input class="field" type="tel" placeholder="(00) 00000-0000"/>
+          </div>
+          <div>
+            <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cor-texto-suave);">Serviço de interesse</label>
+            <!-- [CLIENTE] Ajuste as opções de serviço -->
+            <select class="field" style="cursor:pointer;appearance:none;background:transparent;">
+              <option value="" disabled selected>Selecione...</option>
+              <option>Mechas & Coloração</option>
+              <option>Corte & Visagismo</option>
+              <option>Tratamentos Capilares</option>
+              <option>Penteados & Noivas</option>
+              <option>Alisamento / Botox</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cor-texto-suave);">Mensagem (opcional)</label>
+            <textarea class="field" rows="2" placeholder="Conte um pouco sobre o que deseja..." style="resize:none;"></textarea>
+          </div>
+          <button class="btn-cta w-full justify-center" onclick="this.textContent='Enviado ✓';this.style.background='#4a7c5a';">
+            Enviar Solicitação
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer style="background:#221710;" class="py-10">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+    <div>
+      <!-- [CLIENTE] Nome no footer -->
+      <p style="font-family:var(--font-serif);font-size:1.2rem;font-weight:300;color:rgba(253,249,245,.65);letter-spacing:.04em;">Isabelle Moura · Hair Atelier</p>
+      <p style="font-size:.7rem;color:rgba(253,249,245,.25);margin-top:.3rem;">© 2025 · Todos os direitos reservados</p>
+    </div>
+    <div class="flex items-center gap-6">
+      <!-- [CLIENTE] Links sociais -->
+      <a href="#" class="footer-icon"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+      <a href="#" class="footer-icon"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+      <a href="https://wa.me/5512999999999" target="_blank" class="footer-icon"><i data-lucide="message-circle" class="w-5 h-5"></i></a>
+    </div>
+    <p style="font-size:.7rem;color:rgba(253,249,245,.2);">
+      Desenvolvido por <a href="https://aukan.com.br" target="_blank" style="color:rgba(212,184,150,.45);text-decoration:none;transition:color .3s" onmouseover="this.style.color='#d4b896'" onmouseout="this.style.color='rgba(212,184,150,.45)'">AUKAN Agency</a>
+    </p>
+  </div>
+</footer>
+
+<!-- ══════════════════ JS ══════════════════ -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const E = "power3.out";
+
+// Header entrance
+gsap.set(['#logo','#nav-links','#header-cta'], { y:-14 });
+gsap.timeline({ delay:.1 })
+  .to('#logo',       { opacity:1, y:0, duration:.8, ease:E }, 0)
+  .to('#nav-links',  { opacity:1, y:0, duration:.8, ease:E }, .15)
+  .to('#header-cta', { opacity:1, y:0, duration:.8, ease:E }, .28);
+
+// Hero H1 line reveal
+const lines = document.querySelectorAll('#hero-title .line-mask span');
+gsap.set(lines, { y:'108%' });
+gsap.to(lines, { y:'0%', duration:1.1, ease:E, stagger:.12, delay:.35 });
+
+// Hero elements
+gsap.set(['#hero-label','#hero-sub','#hero-btns','#hero-pill'], { opacity:0, y:28 });
+gsap.to(['#hero-label','#hero-sub','#hero-btns','#hero-pill'], { opacity:1, y:0, duration:.9, ease:E, stagger:.1, delay:.7 });
+
+// Scroll reveal
+document.querySelectorAll('.gsap-reveal').forEach((el,i) => {
+  gsap.fromTo(el,
+    { opacity:0, y:40 },
+    { opacity:1, y:0, duration:.9, ease:E, delay:(i%3)*.08,
+      scrollTrigger:{ trigger:el, start:'top 88%', toggleActions:'play none none none' }
+    }
+  );
+});
+
+// Parallax bento
+document.querySelectorAll('[data-parallax] .parallax-img').forEach(img => {
+  gsap.fromTo(img, { y:'-8%' }, {
+    y:'8%', ease:'none',
+    scrollTrigger:{ trigger:img.closest('[data-parallax]'), start:'top bottom', end:'bottom top', scrub:1.4 }
+  });
+});
+
+// Header shadow
+const hdr = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  hdr.style.boxShadow = window.scrollY > 40 ? '0 4px 36px rgba(107,76,52,.11)' : 'none';
+}, { passive:true });
+
+// Mobile menu
+const menuBtn    = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+menuBtn.addEventListener('click', () => {
+  mobileMenu.classList.toggle('hidden');
+  const ico = menuBtn.querySelector('[data-lucide]');
+  ico.setAttribute('data-lucide', mobileMenu.classList.contains('hidden') ? 'menu' : 'x');
+  lucide.createIcons();
+});
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    mobileMenu.classList.add('hidden');
+    menuBtn.querySelector('[data-lucide]').setAttribute('data-lucide','menu');
+    lucide.createIcons();
+  });
+});
+
+lucide.createIcons();
+</script>
+</body>
+</html>

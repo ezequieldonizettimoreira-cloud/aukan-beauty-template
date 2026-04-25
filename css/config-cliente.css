@@ -1,0 +1,56 @@
+/* ============================================================
+   AUKAN TEMPLATE — CONFIG DO CLIENTE
+   Edite APENAS este arquivo para adaptar a um novo nicho.
+   ============================================================ */
+
+:root {
+
+  /* ── PALETA (troque tudo aqui) ───────────────────────── */
+  --cor-bg:          #fdf9f5;   /* fundo geral              */
+  --cor-bg-alt:      #f0e6d3;   /* seção alternada          */
+  --cor-primaria:    #6b4c34;   /* café — CTA, ícones, destaque */
+  --cor-areia:       #d4b896;   /* sand — labels, ornamento */
+  --cor-texto:       #3d2e22;   /* corpo                    */
+  --cor-texto-suave: #7a5c48;   /* subtítulos, parágrafos   */
+  --cor-borda:       rgba(212,184,150,0.3);
+
+  /* ── GLOW DO BOTÃO ───────────────────────────────────── */
+  --glow: rgba(180,140,100,0.38);
+
+  /* ── EASE GLOBAL ─────────────────────────────────────── */
+  --ease: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* ── TIPOGRAFIA ──────────────────────────────────────── */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans:  'DM Sans', system-ui, sans-serif;
+
+  /* ── CLIENTE ─────────────────────────────────────────── */
+  --cliente-nome:    "Isabelle Moura";
+  --cliente-sub:     "Hair Atelier";
+  --cliente-whatsapp: "5512999999999";
+  --cliente-instagram:"@isabellemourahair";
+  --cliente-endereco: "Rua das Magnólias, 412 — Jardim Europa, SP";
+  --cliente-horario:  "Seg–Sáb · 9h às 19h";
+}
+
+/*
+  ── PALETAS PRÉ-DEFINIDAS POR NICHO ──────────────────────────
+
+  BELEZA / CABELEIREIRA (padrão acima — Nude & Earth)
+  --cor-bg: #fdf9f5 | --cor-primaria: #6b4c34 | --cor-areia: #d4b896
+
+  CLÍNICA ESTÉTICA / SPA (Sage & Marble)
+  --cor-bg: #f5f7f4 | --cor-primaria: #4a6741 | --cor-areia: #c8d5c2
+
+  FOTÓGRAFO (Dark Matte — ver template escuro)
+  --cor-bg: #141414 | --cor-primaria: #d4b896 | --cor-areia: #8a7560
+
+  PERSONAL TRAINER (Steel & Energy)
+  --cor-bg: #f8f8f6 | --cor-primaria: #2c3e50 | --cor-areia: #e67e22
+
+  ARQUITETURA / INTERIORES (Warm White)
+  --cor-bg: #fafaf8 | --cor-primaria: #8b7355 | --cor-areia: #c4b49a
+
+  ADVOCACIA / CONSULTORIA (Navy & Gold)
+  --cor-bg: #f9f8f6 | --cor-primaria: #1a2744 | --cor-areia: #c9a84c
+*/
