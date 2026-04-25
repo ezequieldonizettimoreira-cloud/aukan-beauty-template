@@ -114,14 +114,14 @@ h1,h2{letter-spacing:-0.03em;}
     linear-gradient(165deg,rgba(253,249,245,.93) 0%,rgba(240,230,211,.76) 50%,rgba(253,249,245,.90) 100%),
     url('assets/img/hero/hero-bg.jpg');
   background-size:cover;
-  background-position:center center;
+  background-position:center top;
   background-attachment:scroll;
   min-height:100vh;
   min-height:100svh;
 }
 @media(max-width:640px){
-  /* Ajuste de foco: puxa ponto focal para onde está o sujeito da foto */
-  .hero-bg{ background-position:65% center; }
+  /* MOBILE: ancora no topo para nao cortar cabeca da modelo */
+  .hero-bg{ background-position:70% top; background-size:auto 100%; }
 }
 
 /* ── NAV ── */
