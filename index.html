@@ -120,22 +120,16 @@ h1,h2{letter-spacing:-0.03em;}
   min-height:100svh;
 }
 @media(max-width:640px){
+  /* MOBILE: sem foto no background — usa <img> tag separada abaixo */
   .hero-bg{
-    /* posição: rosto da modelo visível, mais próximo do texto */
-    background-position:80% 18%;
-    background-size:cover;
-    /* gradiente forte à esquerda cobre o rosto sob o texto */
     background-image:
-      linear-gradient(to right,
-        rgba(253,249,245,.97) 0%,
-        rgba(253,249,245,.92) 30%,
-        rgba(253,249,245,.55) 55%,
-        rgba(240,230,211,.10) 100%),
-      url('assets/img/hero/hero-bg.jpg');
-    /* hero menor em mobile — não precisa de tela cheia */
-    min-height:75vh;
-    min-height:75svh;
+      linear-gradient(165deg,rgba(253,249,245,.98) 0%,rgba(240,230,211,.95) 100%);
+    min-height:auto; /* altura automática — conteúdo define */
   }
+  /* esconde elementos desktop-only no mobile hero */
+  .hero-scroll-hint{ display:none; }
+  /* foto mobile aparece */
+  .hero-mobile-img{ display:block !important; }
 }
 
 /* ── NAV ── */
@@ -313,6 +307,34 @@ h1,h2{letter-spacing:-0.03em;}
 .testi-card{transition:transform .5s var(--ease),box-shadow .5s var(--ease);}
 .testi-card:hover{transform:translateY(-5px);box-shadow:0 24px 52px rgba(107,76,52,.1);}
 .gsap-hidden{opacity:0;}
+
+
+/* ── HERO MOBILE IMAGE WRAP ── */
+.hero-mobile-img-wrap{
+  display:none;
+  width:100%;
+  overflow:hidden;
+}
+@media(max-width:640px){
+  .hero-mobile-img-wrap{ display:block; }
+  .hero-mobile-img-wrap img{
+    display:block !important;
+    width:100%;
+    aspect-ratio:3/4;
+    object-fit:cover;
+    object-position:center 12%;
+  }
+}
+/* ── HERO MOBILE IMAGE ── */
+.hero-mobile-img{
+  display:none; /* escondida no desktop */
+  width:100%;
+  aspect-ratio:4/5;
+  object-fit:cover;
+  object-position:center 15%;
+  border-radius:0;
+}
+
 .footer-icon{color:rgba(212,184,150,.4);transition:color .3s var(--ease),transform .3s var(--ease);display:inline-block;}
 .footer-icon:hover{color:#d4b896;transform:translateY(-2px);}
 </style>
@@ -378,12 +400,22 @@ h1,h2{letter-spacing:-0.03em;}
         <p style="font-size:.78rem;color:#6b4c34;"><strong>+320 clientes</strong> transformadas este ano</p>
       </div>
     </div>
-    <div class="mt-20 flex flex-col items-center gap-2 opacity-40">
+    <div class="hero-scroll-hint mt-20 flex flex-col items-center gap-2 opacity-40">
       <span style="font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:#6b4c34;">Role</span>
       <div class="scroll-line"></div>
     </div>
   </div>
 </section>
+
+<!-- FOTO MOBILE — visível só em telas < 640px -->
+<div style="display:none;" class="hero-mobile-img-wrap">
+  <img
+    src="assets/img/hero/hero-bg.jpg"
+    class="hero-mobile-img"
+    alt="Isabelle Moura — Hair Atelier"
+    style="display:none;"
+  />
+</div>
 
 <!-- ══════════ DIFERENCIAIS ══════════ -->
 <section id="diferenciais" class="py-28" style="background:var(--nude-bg);">
