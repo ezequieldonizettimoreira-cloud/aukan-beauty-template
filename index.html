@@ -114,14 +114,17 @@ h1,h2{letter-spacing:-0.03em;}
     linear-gradient(165deg,rgba(253,249,245,.93) 0%,rgba(240,230,211,.76) 50%,rgba(253,249,245,.90) 100%),
     url('assets/img/hero/hero-bg.jpg');
   background-size:cover;
-  background-position:center top;
+  background-position:center 25%; /* desktop: abaixado 25% para mostrar cabeça */
   background-attachment:scroll;
   min-height:100vh;
   min-height:100svh;
 }
 @media(max-width:640px){
   /* MOBILE: ancora no topo para nao cortar cabeca da modelo */
-  .hero-bg{ background-position:70% top; background-size:auto 100%; }
+  .hero-bg{
+    background-position:60% 40%; /* 40% = abaixa bastante, mostra cabeça com folga */
+    background-size:cover;
+  }
 }
 
 /* ── NAV ── */
@@ -308,17 +311,17 @@ h1,h2{letter-spacing:-0.03em;}
 <!-- ══════════ HEADER ══════════ -->
 <header id="header" class="fixed top-0 left-0 right-0 z-50 glass transition-all duration-500">
   <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-    <a href="#" class="flex flex-col leading-none gsap-hidden" id="logo">
+    <a href="#" class="flex flex-col leading-none" id="logo">
       <span style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#6b4c34;letter-spacing:.04em;">Isabelle Moura</span>
       <span style="font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:#b9956f;margin-top:1px;">Hair Atelier</span>
     </a>
-    <nav class="hidden md:flex items-center gap-8 gsap-hidden" id="nav-links">
+    <nav class="hidden md:flex items-center gap-8" id="nav-links">
       <a href="#diferenciais" class="nav-link">Diferenciais</a>
       <a href="#servicos"     class="nav-link">Serviços</a>
       <a href="#depoimentos"  class="nav-link">Clientes</a>
       <a href="#contato"      class="nav-link">Contato</a>
     </nav>
-    <a href="https://wa.me/5512999999999" class="btn-cta hidden md:inline-flex gsap-hidden" id="header-cta" target="_blank">
+    <a href="https://wa.me/5512999999999" class="btn-cta hidden md:inline-flex" id="header-cta" target="_blank">
       Agendar Consulta
     </a>
     <button id="menuBtn" class="md:hidden p-1" style="color:#6b4c34;">
@@ -615,35 +618,68 @@ h1,h2{letter-spacing:-0.03em;}
       </div>
       <div class="glass-card rounded p-9 gsap-reveal" style="border-color:rgba(212,184,150,.18);">
         <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:400;color:#3d2e22;margin-bottom:2rem;">Solicitar Agendamento</h3>
-        <div class="flex flex-col gap-7">
+
+        <!-- STEP 1 — Formulário -->
+        <div id="step1" class="flex flex-col gap-6">
           <div>
             <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9a7560;">Nome completo</label>
-            <input class="field" type="text" placeholder="Seu nome"/>
+            <input id="f-nome" class="field" type="text" placeholder="Seu nome"/>
           </div>
           <div>
             <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9a7560;">WhatsApp</label>
-            <input class="field" type="tel" placeholder="(00) 00000-0000"/>
+            <input id="f-tel" class="field" type="tel" placeholder="(00) 00000-0000"/>
           </div>
           <div>
             <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9a7560;">Serviço de interesse</label>
-            <select class="field" style="cursor:pointer;appearance:none;background:transparent;">
+            <select id="f-servico" class="field" style="cursor:pointer;appearance:none;background:transparent;">
               <option value="" disabled selected>Selecione...</option>
-              <option>Mechas & Coloração</option>
-              <option>Corte & Visagismo</option>
+              <option>Mechas &amp; Coloração</option>
+              <option>Corte &amp; Visagismo</option>
               <option>Tratamentos Capilares</option>
-              <option>Penteados & Noivas</option>
+              <option>Penteados &amp; Noivas</option>
               <option>Alisamento / Botox</option>
             </select>
           </div>
           <div>
-            <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9a7560;">Mensagem (opcional)</label>
-            <textarea class="field" rows="2" placeholder="Conte um pouco sobre o que deseja..." style="resize:none;"></textarea>
+            <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9a7560;">Melhor período</label>
+            <select id="f-periodo" class="field" style="cursor:pointer;appearance:none;background:transparent;">
+              <option value="" disabled selected>Selecione...</option>
+              <option>Manhã (9h–12h)</option>
+              <option>Tarde (12h–16h)</option>
+              <option>Final de tarde (16h–19h)</option>
+            </select>
           </div>
-          <button class="btn-cta w-full justify-center"
-                  onclick="this.textContent='Enviado ✓';this.style.background='#4a7c5a';">
-            Enviar Solicitação
+          <div>
+            <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9a7560;">Observação (opcional)</label>
+            <textarea id="f-obs" class="field" rows="2" placeholder="Ex: primeira vez, tenho alergia a produtos..." style="resize:none;"></textarea>
+          </div>
+          <button onclick="enviarAgendamento()" class="btn-cta w-full justify-center" id="btn-enviar">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            Enviar &amp; Abrir WhatsApp
+          </button>
+          <p style="font-size:.72rem;color:#9a7560;text-align:center;margin-top:-.25rem;">
+            Você será redirecionada ao WhatsApp com os dados já preenchidos.
+          </p>
+        </div>
+
+        <!-- STEP 2 — Confirmação -->
+        <div id="step2" style="display:none;" class="flex flex-col items-center text-center gap-5 py-6">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(74,124,90,.12);display:flex;align-items:center;justify-content:center;">
+            <i data-lucide="check-circle" class="w-7 h-7" style="color:#4a7c5a;"></i>
+          </div>
+          <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:#3d2e22;">Solicitação enviada!</h4>
+          <p style="font-size:.88rem;color:#7a5c48;line-height:1.8;max-width:280px;">
+            Seu WhatsApp foi aberto com os dados preenchidos. Caso não tenha aberto, clique abaixo.
+          </p>
+          <a id="wa-fallback" href="#" target="_blank" class="btn-cta" style="background:#25D366;color:#fff;">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            Abrir WhatsApp
+          </a>
+          <button onclick="resetForm()" style="font-size:.78rem;color:#9a7560;text-decoration:underline;background:none;border:none;cursor:pointer;">
+            Fazer nova solicitação
           </button>
         </div>
+
       </div>
     </div>
   </div>
@@ -676,11 +712,11 @@ gsap.registerPlugin(ScrollTrigger);
 const E = "power3.out";
 
 /* Header entrance */
-gsap.set(['#logo','#nav-links','#header-cta'], { y:-16, opacity:0 });
-gsap.timeline({ delay:.15 })
-  .to('#logo',       { opacity:1, y:0, duration:.8, ease:E }, 0)
-  .to('#nav-links',  { opacity:1, y:0, duration:.8, ease:E }, .14)
-  .to('#header-cta', { opacity:1, y:0, duration:.8, ease:E }, .26);
+
+
+
+
+
 
 /* Hero H1 line-mask */
 const lines = document.querySelectorAll('#hero-title .line-mask span');
@@ -749,6 +785,77 @@ mobileMenu.querySelectorAll('a').forEach(a => {
     lucide.createIcons();
   });
 });
+
+
+/* ══════════════════════════════════════
+   SISTEMA DE AGENDAMENTO — WhatsApp Auto
+   Número da cabeleireira: 5512999999999
+══════════════════════════════════════ */
+const WA_NUMBER = '5512999999999'; // [CLIENTE] troque aqui
+
+function enviarAgendamento() {
+  const nome    = document.getElementById('f-nome').value.trim();
+  const tel     = document.getElementById('f-tel').value.trim();
+  const servico = document.getElementById('f-servico').value;
+  const periodo = document.getElementById('f-periodo').value;
+  const obs     = document.getElementById('f-obs').value.trim();
+
+  // Validação básica
+  if (!nome) { alertField('f-nome', 'Informe seu nome'); return; }
+  if (!tel)  { alertField('f-tel',  'Informe seu WhatsApp'); return; }
+  if (!servico) { alertField('f-servico', 'Selecione um serviço'); return; }
+  if (!periodo) { alertField('f-periodo', 'Selecione um período'); return; }
+
+  // Monta mensagem formatada
+  const msg = [
+    `Olá, Isabelle! 👋 Gostaria de agendar um horário.`,
+    ``,
+    `*Nome:* ${nome}`,
+    `*WhatsApp:* ${tel}`,
+    `*Serviço:* ${servico}`,
+    `*Período:* ${periodo}`,
+    obs ? `*Observação:* ${obs}` : null,
+    ``,
+    `_Solicitação enviada pelo site._`
+  ].filter(l => l !== null).join('
+');
+
+  const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+
+  // Salva fallback e abre WhatsApp
+  document.getElementById('wa-fallback').href = url;
+  window.open(url, '_blank');
+
+  // Muda para step2
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'flex';
+  lucide.createIcons();
+
+  // Dispara evento para Google Analytics / Meta Pixel (se configurado)
+  if (typeof gtag !== 'undefined') gtag('event', 'agendamento_whatsapp', { servico });
+  if (typeof fbq  !== 'undefined') fbq('track', 'Lead', { content_name: servico });
+}
+
+function alertField(id, msg) {
+  const el = document.getElementById(id);
+  el.style.borderBottomColor = '#c0392b';
+  el.focus();
+  el.setAttribute('placeholder', msg);
+  setTimeout(() => {
+    el.style.borderBottomColor = '';
+    el.setAttribute('placeholder', el.getAttribute('data-placeholder') || '');
+  }, 2500);
+}
+
+function resetForm() {
+  document.getElementById('f-nome').value    = '';
+  document.getElementById('f-tel').value     = '';
+  document.getElementById('f-servico').value = '';
+  document.getElementById('f-periodo').value = '';
+  document.getElementById('f-obs').value     = '';
+  document.getElementById('step1').style.display = 'flex';
+  document.getElementById('step2').style.display = 'none';
+}
 
 lucide.createIcons();
 </script>
