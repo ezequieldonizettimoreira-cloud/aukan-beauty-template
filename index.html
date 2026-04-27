@@ -120,10 +120,14 @@ h1,h2{letter-spacing:-0.03em;}
   min-height:100svh;
 }
 @media(max-width:640px){
-  /* MOBILE: ancora no topo para nao cortar cabeca da modelo */
+  /* MOBILE: centralizado, gradiente mais forte para não dominar */
   .hero-bg{
-    background-position:60% 40%; /* 40% = abaixa bastante, mostra cabeça com folga */
+    background-position:45% 20%;
     background-size:cover;
+    /* gradiente mais opaco em mobile para suavizar a imagem */
+    background-image:
+      linear-gradient(165deg,rgba(253,249,245,.96) 0%,rgba(240,230,211,.88) 45%,rgba(253,249,245,.82) 100%),
+      url('assets/img/hero/hero-bg.jpg');
   }
 }
 
@@ -388,22 +392,37 @@ h1,h2{letter-spacing:-0.03em;}
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
       <div class="diff-card gsap-reveal text-center">
-        <div class="w-12 h-12 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:rgba(212,184,150,.18);">
-          <i data-lucide="sparkles" class="w-5 h-5" style="color:#6b4c34;"></i>
+        <div class="w-14 h-14 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:rgba(212,184,150,.15);box-shadow:0 0 0 8px rgba(212,184,150,.07);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b4c34" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="12" cy="12" rx="10" ry="6"/>
+  <circle cx="12" cy="12" r="2.5" fill="#6b4c34" fill-opacity="0.15"/>
+  <circle cx="12" cy="12" r="1"/>
+  <path d="M8.5 8.5 Q12 5 15.5 8.5"/>
+  <path d="M9 15.5 Q12 18 15 15.5"/>
+</svg>
         </div>
         <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:500;color:#3d2e22;margin-bottom:.7rem;">Visagismo Personalizado</h3>
         <p style="font-size:.88rem;color:#7a5c48;line-height:1.8;">Análise do rosto e personalidade para criar um visual único que amplifique sua essência.</p>
       </div>
       <div class="diff-card gsap-reveal text-center">
-        <div class="w-12 h-12 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:rgba(212,184,150,.18);">
-          <i data-lucide="award" class="w-5 h-5" style="color:#6b4c34;"></i>
+        <div class="w-14 h-14 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:rgba(212,184,150,.15);box-shadow:0 0 0 8px rgba(212,184,150,.07);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b4c34" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M6 3h12l4 6-10 12L2 9z"/>
+  <path d="M2 9h20"/>
+  <path d="M6 3l4 6m8-6l-4 6"/>
+</svg>
         </div>
         <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:500;color:#3d2e22;margin-bottom:.7rem;">Produtos Premium</h3>
         <p style="font-size:.88rem;color:#7a5c48;line-height:1.8;">Uso exclusivo de linhas profissionais Wella, Redken e L'Oréal Professionnel para resultados duradouros.</p>
       </div>
       <div class="diff-card gsap-reveal text-center">
-        <div class="w-12 h-12 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:rgba(212,184,150,.18);">
-          <i data-lucide="clock" class="w-5 h-5" style="color:#6b4c34;"></i>
+        <div class="w-14 h-14 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:rgba(212,184,150,.15);box-shadow:0 0 0 8px rgba(212,184,150,.07);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b4c34" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="9"/>
+  <path d="M12 7v5l3 2"/>
+  <path d="M5.5 5.5 L4 4"/>
+  <path d="M18.5 5.5 L20 4"/>
+</svg>
         </div>
         <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:500;color:#3d2e22;margin-bottom:.7rem;">Atendimento Exclusivo</h3>
         <p style="font-size:.88rem;color:#7a5c48;line-height:1.8;">Agenda individual sem sobreposição de horários. Seu tempo e conforto são absoluta prioridade.</p>
