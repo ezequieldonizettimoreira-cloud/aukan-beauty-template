@@ -124,9 +124,13 @@ h1,h2{letter-spacing:-0.03em;}
     /* posição: rosto da modelo visível, mais próximo do texto */
     background-position:80% 18%;
     background-size:cover;
-    /* gradiente: fade curto à esquerda, imagem viva à direita */
+    /* gradiente forte à esquerda cobre o rosto sob o texto */
     background-image:
-      linear-gradient(to right, rgba(253,249,245,.82) 0%, rgba(253,249,245,.35) 35%, rgba(240,230,211,.05) 100%),
+      linear-gradient(to right,
+        rgba(253,249,245,.97) 0%,
+        rgba(253,249,245,.92) 30%,
+        rgba(253,249,245,.55) 55%,
+        rgba(240,230,211,.10) 100%),
       url('assets/img/hero/hero-bg.jpg');
     /* hero menor em mobile — não precisa de tela cheia */
     min-height:75vh;
