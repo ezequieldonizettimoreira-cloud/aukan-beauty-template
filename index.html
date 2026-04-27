@@ -120,14 +120,17 @@ h1,h2{letter-spacing:-0.03em;}
   min-height:100svh;
 }
 @media(max-width:640px){
-  /* MOBILE: centralizado, gradiente mais forte para não dominar */
   .hero-bg{
-    background-position:45% 20%;
+    /* posição: rosto da modelo visível, mais próximo do texto */
+    background-position:55% 18%;
     background-size:cover;
-    /* gradiente mais opaco em mobile para suavizar a imagem */
+    /* gradiente leve — imagem aparece mas não domina */
     background-image:
-      linear-gradient(165deg,rgba(253,249,245,.96) 0%,rgba(240,230,211,.88) 45%,rgba(253,249,245,.82) 100%),
+      linear-gradient(to right, rgba(253,249,245,.88) 0%, rgba(253,249,245,.55) 50%, rgba(240,230,211,.3) 100%),
       url('assets/img/hero/hero-bg.jpg');
+    /* hero menor em mobile — não precisa de tela cheia */
+    min-height:75vh;
+    min-height:75svh;
   }
 }
 
