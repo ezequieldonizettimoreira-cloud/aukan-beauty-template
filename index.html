@@ -1,192 +1,994 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Isabelle Moura · Hair Atelier</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Isabelle Moura · Hair Atelier</title>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
 
-    <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            nude: { 50:'#fdf9f5', 200:'#ede0cc' },
-            cafe: '#6b4c34',
-            sand: '#d4b896'
-          }
-        }
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        nude:{ 50:'#fdf9f5',100:'#f7efe4',200:'#ede0cc',300:'#dfc9ae',400:'#ccaf8e',500:'#b9956f',600:'#a07c58',700:'#846449',800:'#6b503c',900:'#574232' },
+        champagne:'#f0e6d3', sand:'#d4b896', cafe:'#6b4c34'
+      },
+      fontFamily:{
+        serif:['Cormorant Garamond','Georgia','serif'],
+        sans:['DM Sans','system-ui','sans-serif']
       }
     }
-    </script>
+  }
+}
+</script>
 
-    <style>
-    :root {
-      --nude-bg: #fdf9f5;
-      --cafe: #6b4c34;
-      --sand: #d4b896;
-      --ease: cubic-bezier(0.23, 1, 0.32, 1);
-    }
+<style>
+/* ── TOKENS ── */
+:root{
+  --nude-bg:#fdf9f5; --champagne:#f0e6d3;
+  --sand:#d4b896;    --cafe:#6b4c34;
+  --glow:rgba(180,140,100,.38);
+  --ease:cubic-bezier(0.23,1,0.32,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--nude-bg);
+  font-family:'DM Sans',sans-serif;
+  color:#3d2e22;
+  overflow-x:hidden;
+  line-height:1.8;
+}
 
-    body {
-      background: var(--nude-bg);
-      font-family: 'DM Sans', sans-serif;
-      color: #3d2e22;
-      overflow-x: hidden;
-    }
+/* ── GRAIN PAPER TEXTURE ── */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9999;
+  pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px;
+}
 
-    /* GLASS EFFECT */
-    .glass {
-      background: rgba(253, 249, 245, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(212, 184, 150, 0.2);
-    }
+/* ── GLASS ── */
+.glass{
+  background:rgba(253,249,245,.72);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid rgba(212,184,150,.28);
+}
+.glass-card{
+  background:rgba(253,249,245,.58);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(212,184,150,.32);
+}
 
-    /* HERO DESKTOP */
-    .hero-bg {
-      background-image: 
-        linear-gradient(to right, rgba(253,249,245,1) 15%, rgba(253,249,245,0.4) 50%, rgba(253,249,245,0) 100%),
-        url('assets/img/hero/hero-bg.jpg');
-      background-size: cover;
-      background-position: 85% center; /* Ajuste para não cortar o rosto */
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-    }
+/* ── BUTTONS ── */
+.btn-cta{
+  position:relative;display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--cafe);color:#fdf9f5;
+  font-family:'DM Sans',sans-serif;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;font-size:.76rem;
+  padding:.9rem 2.4rem;border-radius:2px;
+  transition:background .4s var(--ease),box-shadow .4s var(--ease),transform .4s var(--ease);
+  overflow:hidden;z-index:0;
+}
+.btn-cta::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at center,var(--glow) 0%,transparent 68%);
+  opacity:0;transition:opacity .4s var(--ease);z-index:-1;
+}
+.btn-cta:hover{background:#7e5a40;box-shadow:0 0 32px var(--glow),0 6px 24px rgba(107,76,52,.28);transform:translateY(-2px);}
+.btn-cta:hover::before{opacity:1;}
+.btn-outline{
+  display:inline-flex;align-items:center;gap:.5rem;
+  border:1px solid var(--cafe);color:var(--cafe);
+  font-family:'DM Sans',sans-serif;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;font-size:.76rem;
+  padding:.9rem 2.4rem;border-radius:2px;
+  transition:all .4s var(--ease);
+}
+.btn-outline:hover{background:var(--cafe);color:#fdf9f5;box-shadow:0 0 26px var(--glow);transform:translateY(-2px);}
 
-    /* HERO MOBILE RE-ESTRUTURADO */
-    @media (max-width: 767px) {
-      .hero-bg {
-        display: none; /* Esconde a versão desktop no mobile */
-      }
-      
-      .hero-mobile {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        background: var(--nude-bg);
-      }
+/* ── TYPOGRAPHY ── */
+h1,h2{letter-spacing:-0.03em;}
+.line-mask{overflow:hidden;display:block;}
+.line-mask span{display:block;will-change:transform;}
 
-      .hero-mobile-image {
-        height: 55vh;
-        position: relative;
-        overflow: hidden;
-      }
+/* ══════════════════════════════════════════════
+   HERO — FIXES MOBILE
+   FIX 1: background-attachment:scroll (Safari iOS não suporta fixed)
+   FIX 2: min-height:100svh com fallback 100vh
+   FIX 3: background-position:center center (não cortava no desktop, mas
+           em mobile portrait a posição 30% cortava o sujeito da foto)
+══════════════════════════════════════════════ */
+.hero-bg{
+  background-image:
+    linear-gradient(to right,rgba(253,249,245,1) 0%,rgba(253,249,245,.98) 30%,rgba(253,249,245,.75) 50%,rgba(253,249,245,.15) 70%,rgba(253,249,245,0) 100%),
+    url('assets/img/hero/hero-bg.jpg');
+  background-size:cover;
+  background-position:center 30%;
+  background-attachment:scroll;
+  min-height:100vh;
+  min-height:100svh;
+}
+@media(max-width:767px){
+  /* MOBILE: sem foto no background — usa <img> tag separada abaixo */
+  .hero-bg{
+    background-image:
+      linear-gradient(165deg,rgba(253,249,245,.98) 0%,rgba(240,230,211,.95) 100%);
+    min-height:auto;
+  }
+  /* esconde elementos desktop-only no mobile hero */
+  .hero-scroll-hint{ display:none; }
+}
 
-      .hero-mobile-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center 20%;
-        /* Máscara para transição suave com o fundo do texto */
-        mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-        -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-      }
+/* ── NAV ── */
+.nav-link{
+  font-family:'DM Sans',sans-serif;font-size:.76rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:#6b4c34;opacity:.7;position:relative;
+  transition:opacity .3s var(--ease);
+}
+.nav-link::after{
+  content:'';position:absolute;left:0;bottom:-3px;
+  width:0;height:1px;background:var(--cafe);
+  transition:width .35s var(--ease);
+}
+.nav-link:hover{opacity:1;}
+.nav-link:hover::after{width:100%;}
 
-      .hero-mobile-content {
-        padding: 2.5rem 1.5rem;
-        flex-grow: 1;
-        text-align: left;
-      }
-    }
+/* ── SCROLL LINE ── */
+.scroll-line{
+  width:1px;height:64px;
+  background:linear-gradient(to bottom,var(--cafe),transparent);
+  margin:0 auto;
+  animation:scrollPulse 2.8s var(--ease) infinite;
+}
+@keyframes scrollPulse{
+  0%,100%{opacity:.25;transform:scaleY(.75) translateY(0);}
+  50%{opacity:1;transform:scaleY(1) translateY(4px);}
+}
 
-    /* BOTÕES PREMIUM */
-    .btn-cta {
-      background: var(--cafe);
-      color: white;
-      padding: 1rem 2rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-size: 0.75rem;
-      font-weight: 500;
-      transition: all 0.4s var(--ease);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .btn-cta:hover {
-      background: #4e3625;
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(107, 76, 52, 0.2);
-    }
+/* ══════════════════════════════════════════════
+   BENTO GRID — FIXES MOBILE
+   BUG RAIZ: cards 4, 5 e 6 não tinham grid-column:span 12
+   no breakpoint mobile → o grid os colocava com 4 colunas
+   cada (já que o default do grid é 12 colunas), resultando
+   em 3 mini-cards por linha com imagens muito cortadas.
 
-    .line-mask { overflow: hidden; display: block; }
-    .gsap-hidden { opacity: 0; }
-    </style>
+   SOLUÇÃO:
+   1. Todos os 6 cards com span 12 explícito em mobile
+   2. Remover height inline dos cards (estava em px fixo)
+   3. Usar min-height controlado por CSS responsivo
+   4. parallax-img com height:100% em mobile (sem os 115%)
+══════════════════════════════════════════════ */
+.bento-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:.75rem;
+}
+
+/* MOBILE — todos em coluna única */
+.bento-1{grid-column:span 12;min-height:300px;}
+.bento-2{grid-column:span 12;min-height:240px;}
+.bento-3{grid-column:span 12;min-height:240px;}
+.bento-4{grid-column:span 12;min-height:240px;}
+.bento-5{grid-column:span 12;min-height:240px;}
+.bento-6{grid-column:span 12;min-height:240px;}
+
+/* TABLET 640px — 2 colunas */
+@media(min-width:640px){
+  .bento-grid{gap:1rem;}
+  .bento-1{grid-column:span 12;min-height:400px;}
+  .bento-2{grid-column:span 6; min-height:260px;}
+  .bento-3{grid-column:span 6; min-height:260px;}
+  .bento-4{grid-column:span 6; min-height:280px;}
+  .bento-5{grid-column:span 6; min-height:280px;}
+  .bento-6{grid-column:span 12;min-height:240px;}
+}
+
+/* DESKTOP MD 768px — layout assimétrico */
+@media(min-width:768px){
+  .bento-1{grid-column:span 7;grid-row:span 2;min-height:480px;}
+  .bento-2{grid-column:span 5;min-height:232px;}
+  .bento-3{grid-column:span 5;min-height:232px;}
+  .bento-4{grid-column:span 4;min-height:320px;}
+  .bento-5{grid-column:span 4;min-height:320px;}
+  .bento-6{grid-column:span 4;min-height:320px;}
+}
+
+/* DESKTOP LG 1024px */
+@media(min-width:1024px){
+  .bento-1{grid-column:span 7;min-height:480px;}
+  .bento-2{grid-column:span 5;min-height:232px;}
+  .bento-3{grid-column:span 5;min-height:232px;}
+  .bento-4{grid-column:span 5;grid-row:span 2;min-height:320px;}
+  .bento-5{grid-column:span 4;min-height:320px;}
+  .bento-6{grid-column:span 4;min-height:320px;}
+}
+
+/* ── BENTO CARD ── */
+.bento-card{
+  overflow:hidden;
+  position:relative; /* CRÍTICO: contexto para .parallax-wrap position:absolute */
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease);
+}
+.bento-card:hover{transform:translateY(-5px);box-shadow:0 28px 60px rgba(107,76,52,.14);}
+@media(max-width:639px){.bento-card:hover{transform:none;}} /* sem hover em touch */
+
+/* ── SHAPES ── */
+.bento-card.rect{border-radius:6px;}
+.bento-card.arc-top{
+  border-top-left-radius:55% 28%;border-top-right-radius:55% 28%;
+  border-bottom-left-radius:4px;border-bottom-right-radius:4px;
+}
+.bento-card.arc-top-right{
+  border-top-left-radius:4px;border-top-right-radius:58% 32%;
+  border-bottom-left-radius:4px;border-bottom-right-radius:4px;
+}
+
+/* ── PARALLAX IMAGE ── */
+.parallax-wrap{
+  width:100%;height:100%;
+  overflow:hidden;
+  position:absolute;inset:0;
+}
+.parallax-img{
+  width:100%;
+  height:115%; /* espaço extra para o scrub do GSAP */
+  object-fit:cover;
+  object-position:center 20%;
+  will-change:transform;
+  display:block;
+  filter:saturate(.92);
+  transition:filter .5s var(--ease);
+}
+/* Mobile: parallax desativado — imagem ocupa 100% normalmente */
+@media(max-width:639px){
+  .parallax-img{
+    height:100%;
+    object-position:center center;
+    will-change:auto;
+  }
+}
+.bento-card:hover .parallax-img{filter:saturate(1.06);}
+
+/* ── LABEL OVERLAY ── */
+.label-overlay{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:2rem 1.4rem 1.4rem;
+  background:linear-gradient(to top,rgba(40,25,15,.72) 0%,transparent 100%);
+  color:#fdf9f5;z-index:2;
+}
+.label-overlay h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;letter-spacing:-.01em;}
+.label-overlay p{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-top:.3rem;}
+
+/* ── ORNAMENT ── */
+.ornament{display:flex;align-items:center;gap:1rem;justify-content:center;}
+.ornament::before,.ornament::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--sand));max-width:80px;}
+.ornament::after{background:linear-gradient(90deg,var(--sand),transparent);}
+
+/* ── SECTION LABEL ── */
+.section-label{
+  font-family:'DM Sans',sans-serif;font-size:.7rem;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--sand);display:block;margin-bottom:.85rem;
+}
+
+/* ── DIFF CARD ── */
+.diff-card{
+  background:white;border:1px solid rgba(212,184,150,.28);
+  border-radius:6px;padding:2.2rem 1.75rem;
+  transition:box-shadow .4s var(--ease),transform .4s var(--ease);
+}
+.diff-card:hover{transform:translateY(-4px);box-shadow:0 20px 48px rgba(107,76,52,.1);}
+
+/* ── MISC ── */
+.stars{color:#b9956f;letter-spacing:2px;}
+.field{
+  width:100%;background:transparent;border:none;
+  border-bottom:1px solid rgba(107,76,52,.28);
+  padding:.75rem 0;font-family:'DM Sans',sans-serif;
+  font-size:.9rem;color:#3d2e22;outline:none;
+  transition:border-color .3s var(--ease);
+}
+.field::placeholder{color:rgba(107,76,52,.4);}
+.field:focus{border-bottom-color:var(--cafe);}
+.testi-card{transition:transform .5s var(--ease),box-shadow .5s var(--ease);}
+.testi-card:hover{transform:translateY(-5px);box-shadow:0 24px 52px rgba(107,76,52,.1);}
+.gsap-hidden{opacity:0;}
+
+
+/* ══════════════════════════════════════════
+   HERO MOBILE — SPLIT LAYOUT
+   Texto esquerda + foto direita lado a lado
+   Visível apenas em < 768px
+══════════════════════════════════════════ */
+.hero-mobile-split{ display:none; }
+.hero-mobile-img-wrap{ display:none; }
+
+@media(max-width:767px){
+  section#hero{ display:none !important; }
+
+  .hero-mobile-split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    min-height:100svh;
+    min-height:100vh;
+    background:var(--nude-bg);
+    padding-top:68px;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .hero-mobile-left{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:2rem 0.75rem 5rem 1.25rem;
+    position:relative;
+    z-index:2;
+  }
+  .hero-mobile-left::before{
+    content:'';
+    position:absolute;
+    left:0;top:15%;bottom:15%;
+    width:1px;
+    background:linear-gradient(to bottom,transparent,var(--sand),transparent);
+  }
+
+  .hero-mobile-right{
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-mobile-right img{
+    position:absolute;
+    inset:0;width:100%;height:100%;
+    object-fit:cover;
+    object-position:left top;
+    -webkit-mask-image:linear-gradient(to right,transparent 0%,black 12%,black 100%);
+    mask-image:linear-gradient(to right,transparent 0%,black 12%,black 100%);
+  }
+
+  .hero-mobile-bottom{
+    position:absolute;
+    bottom:0;left:0;right:0;
+    padding:1.25rem 1.5rem;
+    background:linear-gradient(to top,rgba(253,249,245,.96) 0%,transparent 100%);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    z-index:5;
+  }
+}
+
+.footer-icon{color:rgba(212,184,150,.4);transition:color .3s var(--ease),transform .3s var(--ease);display:inline-block;}
+.footer-icon:hover{color:#d4b896;transform:translateY(-2px);}
+</style>
 </head>
 <body>
 
-<header class="fixed top-0 left-0 right-0 z-50 glass">
+<!-- ══════════ HEADER ══════════ -->
+<header id="header" class="fixed top-0 left-0 right-0 z-50 glass transition-all duration-500">
   <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-    <div class="flex flex-col leading-none">
-      <span style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--cafe);">Isabelle Moura</span>
-      <span style="font-size:.6rem; letter-spacing:.3em; text-transform:uppercase; color:var(--sand);">Hair Atelier</span>
-    </div>
-    <a href="#" class="btn-cta hidden md:flex">Agendar Consulta</a>
+    <a href="#" class="flex flex-col leading-none" id="logo">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#6b4c34;letter-spacing:.04em;">Isabelle Moura</span>
+      <span style="font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:#b9956f;margin-top:1px;">Hair Atelier</span>
+    </a>
+    <nav class="hidden md:flex items-center gap-8" id="nav-links">
+      <a href="#diferenciais" class="nav-link">Diferenciais</a>
+      <a href="#servicos"     class="nav-link">Serviços</a>
+      <a href="#depoimentos"  class="nav-link">Clientes</a>
+      <a href="#contato"      class="nav-link">Contato</a>
+    </nav>
+    <a href="https://wa.me/5512999999999" class="btn-cta hidden md:inline-flex" id="header-cta" target="_blank">
+      Agendar Consulta
+    </a>
+    <button id="menuBtn" class="md:hidden p-1" style="color:#6b4c34;">
+      <i data-lucide="menu" class="w-5 h-5"></i>
+    </button>
+  </div>
+  <div id="mobileMenu" class="hidden px-6 pb-5 flex-col gap-4">
+    <a href="#diferenciais" class="nav-link">Diferenciais</a>
+    <a href="#servicos"     class="nav-link">Serviços</a>
+    <a href="#depoimentos"  class="nav-link">Clientes</a>
+    <a href="#contato"      class="nav-link">Contato</a>
+    <a href="https://wa.me/5512999999999" class="btn-cta self-start mt-2" target="_blank">Agendar Consulta</a>
   </div>
 </header>
 
-<section class="hero-bg hidden md:flex">
+<!-- ══════════ HERO ══════════ -->
+<!-- FIX: sem min-h-screen do Tailwind — controlado pelo CSS .hero-bg -->
+<section class="hero-bg flex flex-col justify-center pt-28 pb-8 md:pb-20" id="hero">
   <div class="max-w-6xl mx-auto px-6 w-full">
-    <div class="max-w-xl">
-      <span class="text-sand uppercase tracking-widest text-[10px] block mb-4">Beleza & Sofisticação</span>
-      <h1 style="font-family:'Cormorant Garamond',serif; font-size: 5.5rem; line-height: 1.1; color: #3d2e22;">
-        Beleza que<br/><em class="italic">revela</em> quem<br/>você é.
+    <div class="max-w-2xl">
+      <span class="section-label gsap-hidden" id="hero-label">Salão · São Paulo</span>
+      <h1 id="hero-title" style="font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7.5vw,6rem);font-weight:300;line-height:1.06;color:#3d2e22;">
+        <span class="line-mask"><span>Beleza que</span></span>
+        <span class="line-mask"><span><em style="font-style:italic;font-weight:300;">revela</em> quem</span></span>
+        <span class="line-mask"><span>você é.</span></span>
       </h1>
-      <p class="text-cafe/70 mt-6 text-lg max-w-sm font-light">
-        Visagismo e tratamentos exclusivos para mulheres que valorizam sua autenticidade.
+      <p id="hero-sub" class="gsap-hidden mt-6" style="font-size:1.05rem;max-width:440px;font-weight:300;line-height:1.8;color:#7a5c48;">
+        Tratamentos exclusivos, mechas personalizadas e visagismo para mulheres que valorizam autenticidade e refinamento.
       </p>
-      <div class="mt-10 flex gap-4">
-        <a href="#" class="btn-cta">Agendar Agora</a>
-        <button class="border border-cafe px-8 py-3 text-[11px] uppercase tracking-widest hover:bg-cafe hover:text-white transition-all">Ver Serviços</button>
+      <div id="hero-btns" class="gsap-hidden mt-10 flex flex-wrap gap-4">
+        <a href="https://wa.me/5512999999999" class="btn-cta" target="_blank">
+          <i data-lucide="calendar" class="w-4 h-4"></i>
+          Agendar Agora
+        </a>
+        <a href="#servicos" class="btn-outline">Ver Serviços</a>
+      </div>
+      <div id="hero-pill" class="gsap-hidden mt-12 inline-flex items-center gap-3 bg-white/60 backdrop-blur border border-nude-200 rounded-full px-5 py-3">
+        <div class="flex -space-x-2">
+          <img src="assets/img/depoimentos/cliente-01.jpg" class="w-8 h-8 rounded-full border-2 border-white object-cover" alt=""/>
+          <img src="assets/img/depoimentos/cliente-02.jpg" class="w-8 h-8 rounded-full border-2 border-white object-cover" alt=""/>
+          <img src="assets/img/depoimentos/cliente-03.jpg" class="w-8 h-8 rounded-full border-2 border-white object-cover" alt=""/>
+        </div>
+        <p style="font-size:.78rem;color:#6b4c34;"><strong>+320 clientes</strong> transformadas este ano</p>
+      </div>
+    </div>
+    <div class="hero-scroll-hint hidden md:flex flex-col items-center gap-2 opacity-40 mt-20">
+      <span style="font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:#6b4c34;">Role</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ HERO MOBILE SPLIT — visível só em < 768px ══════════ -->
+<div class="hero-mobile-split">
+
+  <!-- Coluna esquerda: texto -->
+  <div class="hero-mobile-left">
+    <span style="font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--sand);margin-bottom:.75rem;display:block;">
+      Hair · Atelier
+    </span>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,7.5vw,2.8rem);font-weight:300;line-height:1.08;color:#3d2e22;letter-spacing:-.02em;">
+      Beleza<br/>que<br/><em style="font-style:italic;">revela</em><br/>quem<br/>você é.
+    </h1>
+    <div style="width:28px;height:1px;background:var(--sand);margin:1.25rem 0;"></div>
+    <p style="font-size:.72rem;font-weight:300;color:#7a5c48;line-height:1.75;max-width:130px;">
+      Visagismo, mechas e tratamentos para mulheres que valorizam autenticidade.
+    </p>
+    <a href="https://wa.me/5512999999999" target="_blank"
+       style="margin-top:1.5rem;display:inline-flex;align-items:center;gap:.4rem;
+              background:var(--cafe);color:#fdf9f5;
+              font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:500;
+              letter-spacing:.1em;text-transform:uppercase;
+              padding:.65rem 1.1rem;border-radius:2px;">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012.18 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.59 7.91a16 16 0 006.29 6.29l1.27-.84a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+      Agendar
+    </a>
+  </div>
+
+  <!-- Coluna direita: foto -->
+  <div class="hero-mobile-right">
+    <img src="assets/img/hero/hero-bg.jpg" alt="Isabelle Moura" loading="eager"/>
+  </div>
+
+  <!-- Rodapé do hero: estatística + frase -->
+  <div class="hero-mobile-bottom">
+    <div style="display:flex;align-items:center;gap:.6rem;">
+      <div style="display:flex;">
+        <img src="assets/img/depoimentos/cliente-01.jpg" style="width:22px;height:22px;border-radius:50%;border:2px solid white;object-fit:cover;margin-right:-5px;" alt=""/>
+        <img src="assets/img/depoimentos/cliente-02.jpg" style="width:22px;height:22px;border-radius:50%;border:2px solid white;object-fit:cover;" alt=""/>
+      </div>
+      <p style="font-size:.62rem;color:#6b4c34;"><strong>+320 clientes</strong> transformadas</p>
+    </div>
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.8rem;color:var(--sand);white-space:nowrap;">
+      "Cada fio conta uma história."
+    </p>
+  </div>
+
+</div>
+
+<!-- ══════════ DIFERENCIAIS ══════════ -->
+<section id="diferenciais" class="py-28" style="background:var(--nude-bg);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-20 gsap-reveal">
+      <span class="section-label">Por que escolher</span>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:400;color:#3d2e22;">
+        Uma experiência além do salão
+      </h2>
+      <div class="ornament mt-5">
+        <span style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--sand);font-size:.9rem;">expertise · cuidado · resultado</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+      <div class="diff-card gsap-reveal text-center">
+        <div class="w-14 h-14 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:rgba(212,184,150,.15);box-shadow:0 0 0 8px rgba(212,184,150,.07);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b4c34" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <ellipse cx="12" cy="12" rx="10" ry="6"/>
+  <circle cx="12" cy="12" r="2.5" fill="#6b4c34" fill-opacity="0.15"/>
+  <circle cx="12" cy="12" r="1"/>
+  <path d="M8.5 8.5 Q12 5 15.5 8.5"/>
+  <path d="M9 15.5 Q12 18 15 15.5"/>
+</svg>
+        </div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:500;color:#3d2e22;margin-bottom:.7rem;">Visagismo Personalizado</h3>
+        <p style="font-size:.88rem;color:#7a5c48;line-height:1.8;">Análise do rosto e personalidade para criar um visual único que amplifique sua essência.</p>
+      </div>
+      <div class="diff-card gsap-reveal text-center">
+        <div class="w-14 h-14 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:rgba(212,184,150,.15);box-shadow:0 0 0 8px rgba(212,184,150,.07);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b4c34" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M6 3h12l4 6-10 12L2 9z"/>
+  <path d="M2 9h20"/>
+  <path d="M6 3l4 6m8-6l-4 6"/>
+</svg>
+        </div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:500;color:#3d2e22;margin-bottom:.7rem;">Produtos Premium</h3>
+        <p style="font-size:.88rem;color:#7a5c48;line-height:1.8;">Uso exclusivo de linhas profissionais Wella, Redken e L'Oréal Professionnel para resultados duradouros.</p>
+      </div>
+      <div class="diff-card gsap-reveal text-center">
+        <div class="w-14 h-14 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:rgba(212,184,150,.15);box-shadow:0 0 0 8px rgba(212,184,150,.07);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b4c34" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="9"/>
+  <path d="M12 7v5l3 2"/>
+  <path d="M5.5 5.5 L4 4"/>
+  <path d="M18.5 5.5 L20 4"/>
+</svg>
+        </div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:500;color:#3d2e22;margin-bottom:.7rem;">Atendimento Exclusivo</h3>
+        <p style="font-size:.88rem;color:#7a5c48;line-height:1.8;">Agenda individual sem sobreposição de horários. Seu tempo e conforto são absoluta prioridade.</p>
+      </div>
+    </div>
+    <div class="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 text-center border-t border-nude-200 pt-16">
+      <div class="gsap-reveal">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:#6b4c34;line-height:1;letter-spacing:-.03em;">12+</p>
+        <p style="font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#9a7560;margin-top:.5rem;">Anos de experiência</p>
+      </div>
+      <div class="gsap-reveal">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:#6b4c34;line-height:1;letter-spacing:-.03em;">98%</p>
+        <p style="font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#9a7560;margin-top:.5rem;">Taxa de retorno</p>
+      </div>
+      <div class="gsap-reveal">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:#6b4c34;line-height:1;letter-spacing:-.03em;">320+</p>
+        <p style="font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#9a7560;margin-top:.5rem;">Clientes ativas</p>
+      </div>
+      <div class="gsap-reveal">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:#6b4c34;line-height:1;letter-spacing:-.03em;">5★</p>
+        <p style="font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#9a7560;margin-top:.5rem;">Google Avaliações</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="hero-mobile md:hidden pt-16">
-  <div class="hero-mobile-image">
-    <img src="assets/img/hero/hero-bg.jpg" alt="Isabelle Moura">
-  </div>
-  <div class="hero-mobile-content">
-    <span class="text-sand uppercase tracking-widest text-[10px] block mb-2">Hair Atelier</span>
-    <h1 style="font-family:'Cormorant Garamond',serif; font-size: 3.2rem; line-height: 1.1; color: #3d2e22;">
-      Beleza que<br/><em class="italic">revela</em> quem<br/>você é.
-    </h1>
-    <div class="w-10 h-[1px] bg-sand my-6"></div>
-    <p class="text-cafe/80 text-sm leading-relaxed mb-8">
-      Visagismo, mechas e tratamentos de alta performance para o seu cabelo.
-    </p>
-    <a href="#" class="btn-cta w-full justify-center">Agendar pelo WhatsApp</a>
+<!-- ══════════ SERVIÇOS — BENTO GRID ══════════ -->
+<section id="servicos" class="py-28" style="background:var(--champagne);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6 gsap-reveal">
+      <div>
+        <span class="section-label">Especialidades</span>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:400;color:#3d2e22;">Arte em cada fio</h2>
+      </div>
+      <p style="font-size:.88rem;color:#7a5c48;max-width:300px;line-height:1.8;">Técnicas desenvolvidas ao longo de uma década, refinadas para o resultado perfeito que você merece.</p>
+    </div>
+
+    <!-- FIX: sem height inline nos cards — tudo controlado pelo CSS responsivo -->
+    <div class="bento-grid gsap-reveal">
+
+      <div class="bento-card rect bento-1" data-parallax>
+        <div class="parallax-wrap">
+          <img src="assets/img/servicos/servico-01.jpg" class="parallax-img" alt="Mechas e Coloração"/>
+        </div>
+        <div class="label-overlay">
+          <h3>Mechas & Coloração</h3>
+          <p>Balayage · Babylights · Airtouch</p>
+        </div>
+      </div>
+
+      <div class="bento-card arc-top bento-2" data-parallax>
+        <div class="parallax-wrap">
+          <img src="assets/img/servicos/servico-02.jpg" class="parallax-img" alt="Tratamentos"/>
+        </div>
+        <div class="label-overlay">
+          <h3>Tratamentos Capilares</h3>
+          <p>Reconstrução · Hidratação · Cronograma</p>
+        </div>
+      </div>
+
+      <div class="bento-card rect bento-3" data-parallax>
+        <div class="parallax-wrap">
+          <img src="assets/img/servicos/servico-03.jpg" class="parallax-img" alt="Corte"/>
+        </div>
+        <div class="label-overlay">
+          <h3>Corte & Visagismo</h3>
+          <p>Análise facial · Corte preciso</p>
+        </div>
+      </div>
+
+      <div class="bento-card rect bento-4" data-parallax>
+        <div class="parallax-wrap">
+          <img src="assets/img/servicos/servico-04.jpg" class="parallax-img" alt="Penteados"/>
+        </div>
+        <div class="label-overlay">
+          <h3>Penteados & Noivas</h3>
+          <p>Casamentos · Eventos · Formaturas</p>
+        </div>
+      </div>
+
+      <div class="bento-card arc-top-right bento-5" data-parallax>
+        <div class="parallax-wrap">
+          <img src="assets/img/servicos/servico-05.jpg" class="parallax-img" alt="Alisamento"/>
+        </div>
+        <div class="label-overlay">
+          <h3>Alisamentos</h3>
+          <p>Progressiva · Botox Capilar</p>
+        </div>
+      </div>
+
+      <div class="bento-card rect bento-6" data-parallax>
+        <div class="parallax-wrap">
+          <img src="assets/img/servicos/servico-06.jpg" class="parallax-img" alt="Finalização"/>
+        </div>
+        <div class="label-overlay">
+          <h3>Finalização & Escova</h3>
+          <p>Modelação · Babyliss · Ondas</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-12 gsap-reveal">
+      <a href="https://wa.me/5512999999999" class="btn-cta" target="_blank">
+        <i data-lucide="message-circle" class="w-4 h-4"></i>
+        Consultar valores no WhatsApp
+      </a>
+    </div>
   </div>
 </section>
 
+<!-- ══════════ DEPOIMENTOS ══════════ -->
+<section id="depoimentos" class="py-28" style="background:var(--nude-bg);">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-20 gsap-reveal">
+      <span class="section-label">Depoimentos</span>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:400;color:#3d2e22;">
+        O que dizem minhas clientes
+      </h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="glass-card testi-card rounded p-8 gsap-reveal flex flex-col gap-5">
+        <p class="stars text-sm">★★★★★</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:#4a3426;line-height:1.8;">
+          "Encontrei na Isabelle o equilíbrio perfeito entre técnica e sensibilidade. Meu cabelo nunca esteve tão saudável — e eu tão confiante."
+        </p>
+        <div class="flex items-center gap-3 mt-auto pt-4 border-t border-nude-200">
+          <img src="assets/img/depoimentos/cliente-01.jpg" class="w-10 h-10 rounded-full object-cover" alt=""/>
+          <div>
+            <p style="font-size:.88rem;font-weight:500;color:#3d2e22;">Camila Ferreira</p>
+            <p style="font-size:.74rem;color:#9a7560;">Empresária</p>
+          </div>
+        </div>
+      </div>
+      <div class="glass-card testi-card rounded p-8 gsap-reveal flex flex-col gap-5" style="background:rgba(107,76,52,.05);">
+        <p class="stars text-sm">★★★★★</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:#4a3426;line-height:1.8;">
+          "O visagismo mudou completamente a minha relação com o espelho. Ela entende a alma antes de tocar no cabelo."
+        </p>
+        <div class="flex items-center gap-3 mt-auto pt-4 border-t border-nude-200">
+          <img src="assets/img/depoimentos/cliente-02.jpg" class="w-10 h-10 rounded-full object-cover" alt=""/>
+          <div>
+            <p style="font-size:.88rem;font-weight:500;color:#3d2e22;">Rafaela Andrade</p>
+            <p style="font-size:.74rem;color:#9a7560;">Advogada</p>
+          </div>
+        </div>
+      </div>
+      <div class="glass-card testi-card rounded p-8 gsap-reveal flex flex-col gap-5">
+        <p class="stars text-sm">★★★★★</p>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:#4a3426;line-height:1.8;">
+          "Fiz meu penteado de casamento com ela. Chorei de alegria ao ver o resultado. Profissional de outro nível."
+        </p>
+        <div class="flex items-center gap-3 mt-auto pt-4 border-t border-nude-200">
+          <img src="assets/img/depoimentos/cliente-03.jpg" class="w-10 h-10 rounded-full object-cover" alt=""/>
+          <div>
+            <p style="font-size:.88rem;font-weight:500;color:#3d2e22;">Larissa Matos</p>
+            <p style="font-size:.74rem;color:#9a7560;">Noiva — 2024</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-16 flex justify-center gsap-reveal">
+      <div class="inline-flex items-center gap-5 bg-white border border-nude-200 rounded px-9 py-6 shadow-sm">
+        <div class="text-center">
+          <p style="font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;color:#6b4c34;line-height:1;letter-spacing:-.03em;">5.0</p>
+          <p class="stars text-xs mt-1">★★★★★</p>
+        </div>
+        <div class="w-px h-12 bg-nude-200"></div>
+        <div>
+          <p style="font-size:.84rem;font-weight:500;color:#3d2e22;">Google Avaliações</p>
+          <p style="font-size:.78rem;color:#9a7560;">Baseado em 148 avaliações</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CONTATO ══════════ -->
+<section id="contato" style="background:linear-gradient(135deg,#6b4c34 0%,#3d2e22 100%);" class="py-28">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <div class="gsap-reveal">
+        <span class="section-label" style="color:rgba(212,184,150,.55);">Agende sua visita</span>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:300;color:#fdf9f5;line-height:1.12;">
+          Pronta para a sua<br/><em style="font-style:italic;">transformação?</em>
+        </h2>
+        <p style="font-size:.9rem;color:rgba(253,249,245,.55);margin-top:1.3rem;line-height:1.8;max-width:380px;">
+          Entre em contato pelo WhatsApp ou preencha o formulário. Retorno em até 2 horas em dias úteis.
+        </p>
+        <div class="mt-8 flex flex-col gap-4">
+          <div class="flex items-center gap-3">
+            <i data-lucide="map-pin"      class="w-4 h-4 flex-shrink-0" style="color:#d4b896;"></i>
+            <span style="font-size:.88rem;color:rgba(253,249,245,.68);">Rua das Magnólias, 412 — Jardim Europa, SP</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i data-lucide="phone"        class="w-4 h-4 flex-shrink-0" style="color:#d4b896;"></i>
+            <span style="font-size:.88rem;color:rgba(253,249,245,.68);">(12) 99999-9999</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i data-lucide="instagram"    class="w-4 h-4 flex-shrink-0" style="color:#d4b896;"></i>
+            <span style="font-size:.88rem;color:rgba(253,249,245,.68);">@isabellemourahair</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i data-lucide="clock-3"      class="w-4 h-4 flex-shrink-0" style="color:#d4b896;"></i>
+            <span style="font-size:.88rem;color:rgba(253,249,245,.68);">Seg–Sáb · 9h às 19h</span>
+          </div>
+        </div>
+        <a href="https://wa.me/5512999999999" class="btn-cta mt-10 inline-flex" style="background:#d4b896;color:#3d2e22;" target="_blank">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          Chamar no WhatsApp
+        </a>
+      </div>
+      <div class="glass-card rounded p-9 gsap-reveal" style="border-color:rgba(212,184,150,.18);">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:400;color:#3d2e22;margin-bottom:2rem;">Solicitar Agendamento</h3>
+
+        <!-- STEP 1 — Formulário -->
+        <div id="step1" class="flex flex-col gap-6">
+          <div>
+            <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9a7560;">Nome completo</label>
+            <input id="f-nome" class="field" type="text" placeholder="Seu nome"/>
+          </div>
+          <div>
+            <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9a7560;">WhatsApp</label>
+            <input id="f-tel" class="field" type="tel" placeholder="(00) 00000-0000"/>
+          </div>
+          <div>
+            <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9a7560;">Serviço de interesse</label>
+            <select id="f-servico" class="field" style="cursor:pointer;appearance:none;background:transparent;">
+              <option value="" disabled selected>Selecione...</option>
+              <option>Mechas &amp; Coloração</option>
+              <option>Corte &amp; Visagismo</option>
+              <option>Tratamentos Capilares</option>
+              <option>Penteados &amp; Noivas</option>
+              <option>Alisamento / Botox</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9a7560;">Melhor período</label>
+            <select id="f-periodo" class="field" style="cursor:pointer;appearance:none;background:transparent;">
+              <option value="" disabled selected>Selecione...</option>
+              <option>Manhã (9h–12h)</option>
+              <option>Tarde (12h–16h)</option>
+              <option>Final de tarde (16h–19h)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#9a7560;">Observação (opcional)</label>
+            <textarea id="f-obs" class="field" rows="2" placeholder="Ex: primeira vez, tenho alergia a produtos..." style="resize:none;"></textarea>
+          </div>
+          <button onclick="enviarAgendamento()" class="btn-cta w-full justify-center" id="btn-enviar">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            Enviar &amp; Abrir WhatsApp
+          </button>
+          <p style="font-size:.72rem;color:#9a7560;text-align:center;margin-top:-.25rem;">
+            Você será redirecionada ao WhatsApp com os dados já preenchidos.
+          </p>
+        </div>
+
+        <!-- STEP 2 — Confirmação -->
+        <div id="step2" style="display:none;" class="flex flex-col items-center text-center gap-5 py-6">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(74,124,90,.12);display:flex;align-items:center;justify-content:center;">
+            <i data-lucide="check-circle" class="w-7 h-7" style="color:#4a7c5a;"></i>
+          </div>
+          <h4 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:#3d2e22;">Solicitação enviada!</h4>
+          <p style="font-size:.88rem;color:#7a5c48;line-height:1.8;max-width:280px;">
+            Seu WhatsApp foi aberto com os dados preenchidos. Caso não tenha aberto, clique abaixo.
+          </p>
+          <a id="wa-fallback" href="#" target="_blank" class="btn-cta" style="background:#25D366;color:#fff;">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            Abrir WhatsApp
+          </a>
+          <button onclick="resetForm()" style="font-size:.78rem;color:#9a7560;text-decoration:underline;background:none;border:none;cursor:pointer;">
+            Fazer nova solicitação
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer style="background:#221710;" class="py-10">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+    <div>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:rgba(253,249,245,.65);letter-spacing:.04em;">Isabelle Moura · Hair Atelier</p>
+      <p style="font-size:.7rem;color:rgba(253,249,245,.25);margin-top:.3rem;">© 2025 · Todos os direitos reservados</p>
+    </div>
+    <div class="flex items-center gap-6">
+      <a href="#" class="footer-icon"><i data-lucide="instagram"      class="w-5 h-5"></i></a>
+      <a href="#" class="footer-icon"><i data-lucide="facebook"       class="w-5 h-5"></i></a>
+      <a href="https://wa.me/5512999999999" target="_blank" class="footer-icon"><i data-lucide="message-circle" class="w-5 h-5"></i></a>
+    </div>
+    <p style="font-size:.7rem;color:rgba(253,249,245,.2);">
+      Desenvolvido por <a href="https://aukan.com.br" target="_blank"
+        style="color:rgba(212,184,150,.45);text-decoration:none;transition:color .3s"
+        onmouseover="this.style.color='#d4b896'"
+        onmouseout="this.style.color='rgba(212,184,150,.45)'">AUKAN Agency</a>
+    </p>
+  </div>
+</footer>
+
+<!-- ══════════ JS ══════════ -->
 <script>
-// Animações suaves de entrada
-gsap.from("h1", {
-  duration: 1.2,
-  y: 50,
-  opacity: 0,
-  ease: "power4.out",
-  stagger: 0.2
+gsap.registerPlugin(ScrollTrigger);
+const E = "power3.out";
+
+/* Header entrance */
+
+
+
+
+
+
+/* Hero H1 line-mask */
+const lines = document.querySelectorAll('#hero-title .line-mask span');
+gsap.set(lines, { y:'108%' });
+gsap.to(lines, { y:'0%', duration:1.1, ease:E, stagger:.12, delay:.38 });
+
+/* Hero sub-elements */
+gsap.set(['#hero-label','#hero-sub','#hero-btns','#hero-pill'], { opacity:0, y:30 });
+gsap.to(['#hero-label','#hero-sub','#hero-btns','#hero-pill'], {
+  opacity:1, y:0, duration:.9, ease:E, stagger:.1, delay:.72
 });
 
-gsap.from("p, .btn-cta", {
-  duration: 1,
-  opacity: 0,
-  y: 20,
-  delay: 0.8,
-  stagger: 0.2
+/* Scroll reveal genérico */
+document.querySelectorAll('.gsap-reveal').forEach((el, i) => {
+  gsap.fromTo(el,
+    { opacity:0, y:42 },
+    {
+      opacity:1, y:0, duration:.9, ease:E,
+      delay:(i % 3) * .07,
+      scrollTrigger:{ trigger:el, start:'top 88%', toggleActions:'play none none none' }
+    }
+  );
 });
+
+/* FIX: Parallax apenas em >= 640px
+   Em mobile o parallax causava layout shift porque
+   a parallax-img ficava com height:115% empurrando
+   o card para além do min-height definido */
+if (window.innerWidth >= 640) {
+  document.querySelectorAll('[data-parallax] .parallax-img').forEach(img => {
+    gsap.fromTo(img,
+      { y:'-8%' },
+      {
+        y:'8%', ease:'none',
+        scrollTrigger:{
+          trigger: img.closest('[data-parallax]'),
+          start:'top bottom', end:'bottom top', scrub:1.4
+        }
+      }
+    );
+  });
+}
+
+/* Header shadow */
+const hdr = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  hdr.style.boxShadow = window.scrollY > 40 ? '0 4px 36px rgba(107,76,52,.11)' : 'none';
+}, { passive:true });
+
+/* Mobile menu */
+const menuBtn    = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+menuBtn.addEventListener('click', () => {
+  const isOpen = !mobileMenu.classList.contains('hidden');
+  mobileMenu.classList.toggle('hidden');
+  if (!isOpen) mobileMenu.style.display = 'flex';
+  const ico = menuBtn.querySelector('[data-lucide]');
+  ico.setAttribute('data-lucide', isOpen ? 'menu' : 'x');
+  lucide.createIcons();
+});
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    mobileMenu.classList.add('hidden');
+    mobileMenu.style.display = '';
+    menuBtn.querySelector('[data-lucide]').setAttribute('data-lucide','menu');
+    lucide.createIcons();
+  });
+});
+
+
+/* ══════════════════════════════════════
+   SISTEMA DE AGENDAMENTO — WhatsApp Auto
+   Número da cabeleireira: 5512999999999
+══════════════════════════════════════ */
+const WA_NUMBER = '5512999999999'; // [CLIENTE] troque aqui
+
+function enviarAgendamento() {
+  const nome    = document.getElementById('f-nome').value.trim();
+  const tel     = document.getElementById('f-tel').value.trim();
+  const servico = document.getElementById('f-servico').value;
+  const periodo = document.getElementById('f-periodo').value;
+  const obs     = document.getElementById('f-obs').value.trim();
+
+  // Validação básica
+  if (!nome) { alertField('f-nome', 'Informe seu nome'); return; }
+  if (!tel)  { alertField('f-tel',  'Informe seu WhatsApp'); return; }
+  if (!servico) { alertField('f-servico', 'Selecione um serviço'); return; }
+  if (!periodo) { alertField('f-periodo', 'Selecione um período'); return; }
+
+  // Monta mensagem formatada
+  const msg = [
+    `Olá, Isabelle! 👋 Gostaria de agendar um horário.`,
+    ``,
+    `*Nome:* ${nome}`,
+    `*WhatsApp:* ${tel}`,
+    `*Serviço:* ${servico}`,
+    `*Período:* ${periodo}`,
+    obs ? `*Observação:* ${obs}` : null,
+    ``,
+    `_Solicitação enviada pelo site._`
+  ].filter(l => l !== null).join('
+');
+
+  const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+
+  // Salva fallback e abre WhatsApp
+  document.getElementById('wa-fallback').href = url;
+  window.open(url, '_blank');
+
+  // Muda para step2
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'flex';
+  lucide.createIcons();
+
+  // Dispara evento para Google Analytics / Meta Pixel (se configurado)
+  if (typeof gtag !== 'undefined') gtag('event', 'agendamento_whatsapp', { servico });
+  if (typeof fbq  !== 'undefined') fbq('track', 'Lead', { content_name: servico });
+}
+
+function alertField(id, msg) {
+  const el = document.getElementById(id);
+  el.style.borderBottomColor = '#c0392b';
+  el.focus();
+  el.setAttribute('placeholder', msg);
+  setTimeout(() => {
+    el.style.borderBottomColor = '';
+    el.setAttribute('placeholder', el.getAttribute('data-placeholder') || '');
+  }, 2500);
+}
+
+function resetForm() {
+  document.getElementById('f-nome').value    = '';
+  document.getElementById('f-tel').value     = '';
+  document.getElementById('f-servico').value = '';
+  document.getElementById('f-periodo').value = '';
+  document.getElementById('f-obs').value     = '';
+  document.getElementById('step1').style.display = 'flex';
+  document.getElementById('step2').style.display = 'none';
+}
+
+lucide.createIcons();
 </script>
-
 </body>
 </html>
