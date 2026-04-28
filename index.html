@@ -119,17 +119,15 @@ h1,h2{letter-spacing:-0.03em;}
   min-height:100vh;
   min-height:100svh;
 }
-@media(max-width:640px){
+@media(max-width:767px){
   /* MOBILE: sem foto no background — usa <img> tag separada abaixo */
   .hero-bg{
     background-image:
       linear-gradient(165deg,rgba(253,249,245,.98) 0%,rgba(240,230,211,.95) 100%);
-    min-height:auto; /* altura automática — conteúdo define */
+    min-height:auto;
   }
   /* esconde elementos desktop-only no mobile hero */
   .hero-scroll-hint{ display:none; }
-  /* foto mobile aparece */
-  .hero-mobile-img{ display:block !important; }
 }
 
 /* ── NAV ── */
@@ -309,30 +307,29 @@ h1,h2{letter-spacing:-0.03em;}
 .gsap-hidden{opacity:0;}
 
 
-/* ── HERO MOBILE IMAGE WRAP ── */
+/* ══════════════════════════════
+   HERO MOBILE IMAGE
+   Aparece só em < 768px, empilhada
+   abaixo do texto. Desktop: oculta.
+══════════════════════════════ */
 .hero-mobile-img-wrap{
-  display:none;
+  display:none; /* oculta no desktop */
   width:100%;
   overflow:hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
 }
-@media(max-width:640px){
-  .hero-mobile-img-wrap{ display:block; }
-  .hero-mobile-img-wrap img{
-    display:block !important;
-    width:100%;
-    aspect-ratio:3/4;
-    object-fit:cover;
-    object-position:center 12%;
-  }
-}
-/* ── HERO MOBILE IMAGE ── */
 .hero-mobile-img{
-  display:none; /* escondida no desktop */
+  display:block !important;
   width:100%;
-  aspect-ratio:4/5;
+  aspect-ratio:3/4;
   object-fit:cover;
   object-position:center 15%;
-  border-radius:0;
+}
+@media(max-width:767px){
+  .hero-mobile-img-wrap{
+    display:block !important;
+  }
 }
 
 .footer-icon{color:rgba(212,184,150,.4);transition:color .3s var(--ease),transform .3s var(--ease);display:inline-block;}
@@ -372,7 +369,7 @@ h1,h2{letter-spacing:-0.03em;}
 
 <!-- ══════════ HERO ══════════ -->
 <!-- FIX: sem min-h-screen do Tailwind — controlado pelo CSS .hero-bg -->
-<section class="hero-bg flex flex-col justify-center pt-28 pb-20" id="hero">
+<section class="hero-bg flex flex-col justify-center pt-28 pb-8 md:pb-20" id="hero">
   <div class="max-w-6xl mx-auto px-6 w-full">
     <div class="max-w-2xl">
       <span class="section-label gsap-hidden" id="hero-label">Salão · São Paulo</span>
@@ -400,7 +397,7 @@ h1,h2{letter-spacing:-0.03em;}
         <p style="font-size:.78rem;color:#6b4c34;"><strong>+320 clientes</strong> transformadas este ano</p>
       </div>
     </div>
-    <div class="hero-scroll-hint mt-20 flex flex-col items-center gap-2 opacity-40">
+    <div class="hero-scroll-hint hidden md:flex flex-col items-center gap-2 opacity-40 mt-20">
       <span style="font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:#6b4c34;">Role</span>
       <div class="scroll-line"></div>
     </div>
@@ -408,12 +405,12 @@ h1,h2{letter-spacing:-0.03em;}
 </section>
 
 <!-- FOTO MOBILE — visível só em telas < 640px -->
-<div style="display:none;" class="hero-mobile-img-wrap">
+<div class="hero-mobile-img-wrap">
   <img
     src="assets/img/hero/hero-bg.jpg"
     class="hero-mobile-img"
     alt="Isabelle Moura — Hair Atelier"
-    style="display:none;"
+    loading="eager"
   />
 </div>
 
