@@ -307,28 +307,67 @@ h1,h2{letter-spacing:-0.03em;}
 .gsap-hidden{opacity:0;}
 
 
-/* ══════════════════════════════
-   HERO MOBILE IMAGE
-   Aparece só em < 768px, empilhada
-   abaixo do texto. Desktop: oculta.
-══════════════════════════════ */
-.hero-mobile-img-wrap{
-  display:none; /* oculta no desktop */
-  width:100%;
-  overflow:hidden;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
-}
-.hero-mobile-img{
-  display:block !important;
-  width:100%;
-  aspect-ratio:3/4;
-  object-fit:cover;
-  object-position:center 15%;
-}
+/* ══════════════════════════════════════════
+   HERO MOBILE — SPLIT LAYOUT
+   Texto esquerda + foto direita lado a lado
+   Visível apenas em < 768px
+══════════════════════════════════════════ */
+.hero-mobile-split{ display:none; }
+.hero-mobile-img-wrap{ display:none; }
+
 @media(max-width:767px){
-  .hero-mobile-img-wrap{
-    display:block !important;
+  section#hero{ display:none !important; }
+
+  .hero-mobile-split{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    min-height:100svh;
+    min-height:100vh;
+    background:var(--nude-bg);
+    padding-top:68px;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .hero-mobile-left{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:2rem 0.75rem 5rem 1.25rem;
+    position:relative;
+    z-index:2;
+  }
+  .hero-mobile-left::before{
+    content:'';
+    position:absolute;
+    left:0;top:15%;bottom:15%;
+    width:1px;
+    background:linear-gradient(to bottom,transparent,var(--sand),transparent);
+  }
+
+  .hero-mobile-right{
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-mobile-right img{
+    position:absolute;
+    inset:0;width:100%;height:100%;
+    object-fit:cover;
+    object-position:center 10%;
+    -webkit-mask-image:linear-gradient(to right,transparent 0%,black 22%,black 100%);
+    mask-image:linear-gradient(to right,transparent 0%,black 22%,black 100%);
+  }
+
+  .hero-mobile-bottom{
+    position:absolute;
+    bottom:0;left:0;right:0;
+    padding:1.25rem 1.5rem;
+    background:linear-gradient(to top,rgba(253,249,245,.96) 0%,transparent 100%);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    z-index:5;
   }
 }
 
@@ -404,14 +443,51 @@ h1,h2{letter-spacing:-0.03em;}
   </div>
 </section>
 
-<!-- FOTO MOBILE — visível só em telas < 640px -->
-<div class="hero-mobile-img-wrap">
-  <img
-    src="assets/img/hero/hero-bg.jpg"
-    class="hero-mobile-img"
-    alt="Isabelle Moura — Hair Atelier"
-    loading="eager"
-  />
+<!-- ══════════ HERO MOBILE SPLIT — visível só em < 768px ══════════ -->
+<div class="hero-mobile-split">
+
+  <!-- Coluna esquerda: texto -->
+  <div class="hero-mobile-left">
+    <span style="font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--sand);margin-bottom:.75rem;display:block;">
+      Hair · Atelier
+    </span>
+    <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,7.5vw,2.8rem);font-weight:300;line-height:1.08;color:#3d2e22;letter-spacing:-.02em;">
+      Beleza<br/>que<br/><em style="font-style:italic;">revela</em><br/>quem<br/>você é.
+    </h1>
+    <div style="width:28px;height:1px;background:var(--sand);margin:1.25rem 0;"></div>
+    <p style="font-size:.72rem;font-weight:300;color:#7a5c48;line-height:1.75;max-width:130px;">
+      Visagismo, mechas e tratamentos para mulheres que valorizam autenticidade.
+    </p>
+    <a href="https://wa.me/5512999999999" target="_blank"
+       style="margin-top:1.5rem;display:inline-flex;align-items:center;gap:.4rem;
+              background:var(--cafe);color:#fdf9f5;
+              font-family:'DM Sans',sans-serif;font-size:.62rem;font-weight:500;
+              letter-spacing:.1em;text-transform:uppercase;
+              padding:.65rem 1.1rem;border-radius:2px;">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012.18 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.59 7.91a16 16 0 006.29 6.29l1.27-.84a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+      Agendar
+    </a>
+  </div>
+
+  <!-- Coluna direita: foto -->
+  <div class="hero-mobile-right">
+    <img src="assets/img/hero/hero-bg.jpg" alt="Isabelle Moura" loading="eager"/>
+  </div>
+
+  <!-- Rodapé do hero: estatística + frase -->
+  <div class="hero-mobile-bottom">
+    <div style="display:flex;align-items:center;gap:.6rem;">
+      <div style="display:flex;">
+        <img src="assets/img/depoimentos/cliente-01.jpg" style="width:22px;height:22px;border-radius:50%;border:2px solid white;object-fit:cover;margin-right:-5px;" alt=""/>
+        <img src="assets/img/depoimentos/cliente-02.jpg" style="width:22px;height:22px;border-radius:50%;border:2px solid white;object-fit:cover;" alt=""/>
+      </div>
+      <p style="font-size:.62rem;color:#6b4c34;"><strong>+320 clientes</strong> transformadas</p>
+    </div>
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.8rem;color:var(--sand);white-space:nowrap;">
+      "Cada fio conta uma história."
+    </p>
+  </div>
+
 </div>
 
 <!-- ══════════ DIFERENCIAIS ══════════ -->
